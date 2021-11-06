@@ -3,6 +3,8 @@ import { NestModule, MiddlewareConsumer } from "@nestjs/common";
 import { schemaExtension } from "./schema";
 import { CUSTOM_PERMISSION_ARR }  from "./Permission/customPermission";
 import { Post, PostTaxonomy, PostTaxonomyValue, RelatedPost, RelatedUser } from "./Post/entity";
+import { PostService } from "./Post/service";
+import { PostResolver } from "./Post/resolver";
 @VendurePlugin({
   entities: [
     // Profile,
@@ -13,13 +15,14 @@ import { Post, PostTaxonomy, PostTaxonomyValue, RelatedPost, RelatedUser } from 
     RelatedUser
   ],
   providers: [  
+    PostService
     // ProfileService,
     // AddressService,
   ],
   adminApiExtensions: {
     schema: schemaExtension,
     resolvers: [
-      // ProfileResolver,
+      PostResolver
       // AddressResolver,
     ],
   },

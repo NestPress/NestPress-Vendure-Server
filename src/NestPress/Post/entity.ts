@@ -20,8 +20,8 @@ import { DeepPartial } from "@vendure/common/lib/shared-types";
 // };
 
 
-type PostType = "Post" | "Page" | "Comment";
-type PostStatus = "Draft" | "Published" | "Blocked" | "Archive" | "Trash";
+export type PostType = "Post" | "Page" | "Comment";
+export type PostStatus = "Draft" | "Published" | "Blocked" | "Archive" | "Trash";
 
 
 @Unique(["slug"])

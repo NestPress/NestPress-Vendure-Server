@@ -1,10 +1,27 @@
 import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
 import { Ctx, ID, RequestContext, Transaction } from "@vendure/core";
-import { GetPostArgs } from "../schemaTypes";
 
 import { PostService } from "./service";
-import { PostInput } from "./entity";
+import { Post, PostTaxonomyValue, PostType } from "./entity";
+import { GetListArgs, ListFiltersOperators } from "../common";
+
+export type PostInput = {
+  publishAt: Date 
+    expireAt: Date
+    type: PostType
+    title: string
+    content: string
+}
+
+export type PostsFilter = {
+    type: ListFiltersOperators<Post>;
+    id: ListFiltersOperators<number>;
+    category: ListFiltersOperators<PostTaxonomyValue>
+    tags: ListFiltersOperators<PostTaxonomyValue>
+}
+
+export type GetPostsArgs = GetListArgs<PostsFilter>;
 
 @Resolver("Post")
 export class PostResolver {
@@ -47,7 +64,7 @@ export class PostResolver {
   }
 
   @Query()
-  async getPosts(@Ctx() ctx: RequestContext, @Args() args: GetPostArgs) {
+  async getPosts(@Ctx() ctx: RequestContext, @Args() args: GetPostsArgs) {
     return this.postService.getPosts(ctx, args);
   }
 

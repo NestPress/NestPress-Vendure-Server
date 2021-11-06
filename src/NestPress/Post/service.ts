@@ -1,0 +1,2 @@
+@Injectable()
+export class PostService {}

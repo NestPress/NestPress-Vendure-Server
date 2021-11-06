@@ -7,7 +7,7 @@ export const extendAssets = gql`
   }
 
   extend type Customer {
-    assets: Assets!
+    assets: Assets
   }
 
   type OrderableAsset {

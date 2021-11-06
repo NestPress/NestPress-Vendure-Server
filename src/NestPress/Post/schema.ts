@@ -53,13 +53,13 @@ export const extendPost = gql`
 
   type RelatedPost {
     post: Post!
-    type: String!
+    relationType: String!
     customFields: JSON
   }
 
   type RelatedUser {
     user: User!
-    type: String!
+    relationType: String!
     customFields: JSON
   }
 

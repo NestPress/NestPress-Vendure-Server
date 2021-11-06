@@ -1,4 +1,4 @@
-import { PluginCommonModule, VendurePlugin } from "@vendure/core";
+import { Customer, PluginCommonModule, VendurePlugin } from "@vendure/core";
 import { NestModule, MiddlewareConsumer } from "@nestjs/common";
 import { schemaExtension } from "./schema";
 import { CUSTOM_PERMISSION_ARR } from "./Permission/customPermission";
@@ -26,6 +26,12 @@ import { PostResolver } from "./Post/resolver";
     // ProfileService,
     // AddressService,
   ],
+  shopApiExtensions: {
+    schema: schemaExtension,
+    resolvers: [
+      PostResolver
+    ]
+  },
   adminApiExtensions: {
     schema: schemaExtension,
     resolvers: [
@@ -43,6 +49,19 @@ import { PostResolver } from "./Post/resolver";
           type: "string",
         },
       ],
+      Customer: [
+        {
+          name: 'posts',
+          type: 'relation',
+          entity: Post,
+          // may be omitted if the entity name matches the GraphQL type name,
+          // which is true for all built-in entities.
+          graphQLType: 'Post',
+          // Whether to "eagerly" load the relation
+          // See https://typeorm.io/#/eager-and-lazy-relations
+          eager: false,
+        }
+      ]
     };
 
     return config;

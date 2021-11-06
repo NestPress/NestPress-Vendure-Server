@@ -114,9 +114,9 @@ const assets = gql`
     file: Upload!
   }
 
-  extend type Mutation {
-    updateAssetFile(input: UpdateAssetFileInput!): CreateAssetResult!
-  }
+  #extend type Mutation {
+  #  updateAssetFile(input: UpdateAssetFileInput!): CreateAssetResult!
+  #}
 `;
 
 

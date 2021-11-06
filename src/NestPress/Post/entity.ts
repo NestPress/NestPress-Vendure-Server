@@ -119,7 +119,7 @@ export class PostTaxonomyValue extends VendureEntity {
   value!: string
 
   @JoinColumn()
-  @ManyToOne(() => PostTaxonomyValue)
+  @ManyToOne(() => PostTaxonomyValue, {})
   parent?: PostTaxonomyValue
 
   @ManyToOne(() => PostTaxonomy)

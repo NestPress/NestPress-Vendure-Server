@@ -5,8 +5,11 @@
   "scripts": {
     "run:server": "ts-node ./src/index.ts",
     "run:worker": "ts-node ./src/index-worker.ts",
+    "dev:server": "ts-node-dev --respawn ./src/index.ts",
+    "dev:worker": "ts-node-dev ./src/index-worker.ts",
     "start": "concurrently yarn:run:*",
     "build": "tsc",
+    "dev": "concurrently yarn:dev:*",
     "migration:generate": "ts-node migration generate",
     "migration:run": "ts-node migration run",
     "migration:revert": "ts-node migration revert",

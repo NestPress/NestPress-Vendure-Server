@@ -32,9 +32,18 @@ export class PostService {
 
     return qb.getListWithCount(qb.getQuery());
   }
-  changePostStatus(ctx: RequestContext, id: ID, status: string) {
-    throw new Error("Method not implemented.");
+  async changePostStatus(ctx: RequestContext, id: ID, status: string) {
+    const repository = this.connection.getRepository(ctx, Post);
+
+    await repository.update(id, {
+      status: status as any
+    });
+
+    const post = await repository.findOneOrFail(id);
+
+    return post;
   }
+
   async deletePost(ctx: RequestContext, id: ID) {
     const repository = this.connection.getRepository(ctx, Post);
 
@@ -42,8 +51,16 @@ export class PostService {
 
     return id;
   }
-  updatePost(ctx: RequestContext, id: ID, input: PostInput) {
-    throw new Error("Method not implemented.");
+  async updatePost(ctx: RequestContext, id: ID, input: PostInput) {
+    const repository = this.connection.getRepository(ctx, Post);
+
+    await repository.update(id, {
+      ...input
+    });
+
+    const post = await repository.findOneOrFail(id);
+
+    return post;
   }
   async createPost(ctx: RequestContext, input: PostInput) {
     const repository = this.connection.getRepository(ctx, Post);

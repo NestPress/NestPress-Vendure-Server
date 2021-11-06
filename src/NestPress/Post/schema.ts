@@ -64,7 +64,7 @@ export const extendPost = gql`
   }
 
 
-  input PostInput {
+  input CreatePostInput {
     publishAt: DateTime 
     expireAt: DateTime
     type: PostType!
@@ -76,9 +76,21 @@ export const extendPost = gql`
     # relatedUsers: [RelatedUser]
   }
 
+  input UpdatePostInput {
+    publishAt: DateTime 
+    expireAt: DateTime
+    type: PostType
+    title: String!
+    content: String
+    # assets: Assets
+    # taxonomy: [PostTaxonomy]
+    # relatedPosts: [RelatedPost]
+    # relatedUsers: [RelatedUser]
+  }
+
   extend type Mutation {
-    createPost(input: PostInput): Post
-    updatePost(input: PostInput): Post
+    createPost(input: CreatePostInput): Post
+    updatePost(id: ID!,input: UpdatePostInput): Post
     changePostStatus(id: ID!, status:PostStatus!): Post
     changePostSlug(id: ID!, slug:String!): Post
     deletePost(id: ID!): ID 

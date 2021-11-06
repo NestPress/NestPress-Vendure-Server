@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "concurrently": "6.3.0",
-    "ts-node": "10.3.0"
+    "ts-node": "10.3.0",
+    "ts-node-dev": "^1.1.6"
   }
 }

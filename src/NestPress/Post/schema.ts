@@ -120,6 +120,7 @@ export const extendPost = gql`
     id: IDOperators
     category: PostTaxonomyValueOperators
     tags: PostTaxonomyValueOperators
+    title: StringOperators
   }
 
   type PostsPaginatedResult {

@@ -12,6 +12,7 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from "typeorm";
 import { DeepPartial } from "@vendure/common/lib/shared-types";
 
@@ -34,11 +35,20 @@ export class Post extends VendureEntity {
     id!: number
     @CreateDateColumn()
     createdAt!: Date
+    
     @UpdateDateColumn()
     updatedAt!: Date
-    @Column()
+
+    @DeleteDateColumn()
+    deletedAt!: Date
+
+    @Column({
+      nullable: true
+    })
     publishAt?: Date 
-    @Column()
+    @Column({
+      nullable: true
+    })
     expireAt?: Date
     @OneToOne(() => Customer)
     createdBy!: Customer
@@ -56,9 +66,13 @@ export class Post extends VendureEntity {
     status!: PostStatus
     @Column()
     title!: string
-    @Column()
+    @Column({
+      nullable: true
+    })
     slug!: string
-    @Column()
+    @Column({
+      nullable: true
+    })
     content?: string
     @OneToMany(() => PostTaxonomy, taxonomy => taxonomy.posts)
     @JoinColumn()

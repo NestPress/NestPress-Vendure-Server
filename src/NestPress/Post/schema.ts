@@ -81,6 +81,7 @@ export const extendPost = gql`
     updatePost(input: PostInput): Post
     changePostStatus(id: ID!, status:PostStatus!): Post
     changePostSlug(id: ID!, slug:String!): Post
+    deletePost(id: ID!): ID 
   }
 
   input PostTypeOperators {

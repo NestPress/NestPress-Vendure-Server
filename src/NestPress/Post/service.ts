@@ -1,13 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { ID, RequestContext, TransactionalConnection } from "@vendure/core";
 import { GetPostsArgs, PostInput } from "./resolver";
-import { Post } from "./entity"
+import { Post } from "./entity";
 
 @Injectable()
 export class PostService {
-	constructor(
-    private connection: TransactionalConnection,
-  ){}
+  constructor(private connection: TransactionalConnection) {}
   getById(ctx: RequestContext, id: string) {
     throw new Error("Method not implemented.");
   }
@@ -17,8 +15,12 @@ export class PostService {
   changePostStatus(ctx: RequestContext, id: ID, status: string) {
     throw new Error("Method not implemented.");
   }
-  deletePost(ctx: RequestContext, id: ID) {
-    throw new Error("Method not implemented.");
+  async deletePost(ctx: RequestContext, id: ID) {
+    const repository = this.connection.getRepository(ctx, Post);
+
+    repository.softDelete(id);
+
+    return id;
   }
   updatePost(ctx: RequestContext, id: ID, input: PostInput) {
     throw new Error("Method not implemented.");

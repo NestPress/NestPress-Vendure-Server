@@ -1,4 +1,4 @@
-import { VendureEntity, ID, Asset } from "@vendure/core";
+import { VendureEntity, ID, Asset, Customer } from "@vendure/core";
 import {
   Column,
   Entity,
@@ -9,6 +9,9 @@ import {
   OneToMany,
   JoinColumn,
   BeforeInsert,
+  CreateDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { DeepPartial } from "@vendure/common/lib/shared-types";
 
@@ -43,8 +46,10 @@ export class Post extends VendureEntity {
       default: 'Post'
     })
     postType!: PostType
-    @Column()
-    assets?: Assets
+    
+    // @Column()
+    // assets?: Assets
+
     @Column({
       default: 'Draft'
     })
@@ -58,10 +63,10 @@ export class Post extends VendureEntity {
     @OneToMany(() => PostTaxonomy, taxonomy => taxonomy.posts)
     @JoinColumn()
     taxonomy!: PostTaxonomy[]
-    @OneToMany(() => RelatedPost, relatedPosts=>relatedPost.post)
+    @OneToMany(() => RelatedPost, relatedPost=>relatedPost.post)
     @JoinColumn()
     relatedPosts!: RelatedPost[]
-    @OneToMany(() => RelatedUser, relatedUser=>relatedPost.post)
+    @OneToMany(() => RelatedUser, relatedUser=>relatedUser.post)
     @JoinColumn()
     relatedUsers!: RelatedUser[]
 
@@ -76,13 +81,13 @@ export class PostTaxonomy extends VendureEntity {
   @JoinColumn()
   posts!: Post[];
   
-  @OneToMany(() => PostTaxonomyValue)
+  @OneToMany(() => PostTaxonomyValue, postTaxonomy => postTaxonomy.postCategories)
   @JoinColumn()
-  postCategories!: [PostTaxonomyValue]
+  postCategories!: PostTaxonomyValue[]
   
-  @OneToMany(() => PostTaxonomyValue)
+  @OneToMany(() => PostTaxonomyValue, postTaxonomy => postTaxonomy.postTags)
   @JoinColumn()
-  postTags!: [PostTaxonomyValue]
+  postTags!: PostTaxonomyValue[]
 }
 
 @Entity()
@@ -102,7 +107,31 @@ export class PostTaxonomyValue extends VendureEntity {
   @JoinColumn()
   @ManyToOne(() => PostTaxonomyValue)
   parent?: PostTaxonomyValue
+
+  @ManyToOne(() => PostTaxonomy)
+  postCategories!: PostTaxonomy;
+
+  @ManyToOne(() => PostTaxonomy)
+  postTags!: PostTaxonomy;
 }
+
+export class RelatedEntity extends VendureEntity {
+  constructor(input?: DeepPartial<Post>) {
+    super(input);
+  }
+  @PrimaryGeneratedColumn()
+  id!: number
+  @Column()
+  relationType!: string
+  @Column({
+    type: 'simple-json'
+  })
+  customFields?: any
+  @JoinColumn()
+  @ManyToOne(() => Post, post => post.relatedPosts)
+  post!: Post
+}
+
 @Entity()
 export class RelatedPost extends RelatedEntity {
   constructor(input?: DeepPartial<Post>) {
@@ -115,17 +144,4 @@ export class RelatedUser extends RelatedEntity {
     super(input);
   }
 }
-export class RelatedEntity extends VendureEntity {
-  constructor(input?: DeepPartial<Post>) {
-    super(input);
-  }
-  @PrimaryGeneratedColumn()
-  id!: number
-  @Column()
-  relationType!: string
-  @Column()
-  customFields?: any
-  @JoinColumn()
-  @ManyToOne(() => Post, post => post.relatedPosts)
-  post!: Post
-}
+

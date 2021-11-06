@@ -1,0 +1,31 @@
+version: "3.3"
+
+services:
+  db:
+    image: "postgres:13.2"
+    container_name: "my_postgres"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data_2:/var/lib/postgresql/data/
+  pgadmin:
+    image: dpage/pgadmin4:5.1
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com
+      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    links:
+      - "db:pgsql-server"
+
+volumes:
+  pg_data_2:
+  pgadmin-data:

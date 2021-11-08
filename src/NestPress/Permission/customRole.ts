@@ -44,7 +44,7 @@ export const CUSTOM_ROLES: Record<
   Pick<Role, "code" | "description" | "channels" | "permissions">
 > = {
   OPERATOR: {
-    code: "__admin_user__",
+    code: "__operator_user__",
     description: "user operator",
     channels: [{ id: 1 }] as Role["channels"],
     permissions: operatorPermissions,

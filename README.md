@@ -29,6 +29,13 @@ the `src` directory.
 
 * `/src/NestPress` - blog plugin extention
 
+#### Post
+![post](https://raw.githubusercontent.com/NestPress/vServer/main/static/readme/post.png?raw=true)
+
+#### Customer
+![post](https://raw.githubusercontent.com/NestPress/vServer/main/static/readme/customer.png
+?raw=true)
+
 ## Working with app
 
 `http://localhost:3000/admin-api`

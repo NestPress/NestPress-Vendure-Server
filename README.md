@@ -25,6 +25,10 @@ npm run start
 will start the Vendure server and [worker](https://www.vendure.io/docs/developer-guide/vendure-worker/) processes from
 the `src` directory.
 
+## NuxtPress plugin
+
+* `/src/NestPress` - blog plugin extention
+
 ## Working with app
 
 `http://localhost:3000/admin-api`

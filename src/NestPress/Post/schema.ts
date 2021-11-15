@@ -5,6 +5,9 @@ export const extendPost = gql`
     Post
     Page
     Comment
+    Event
+    Facet
+    Meta
   }
 
   enum PostStatus {

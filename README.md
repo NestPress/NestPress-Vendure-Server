@@ -29,12 +29,11 @@ the `src` directory.
 
 * `/src/NestPress` - blog plugin extention
 
-#### Post
+#### Insert Post (blog post type)
 ![post](https://raw.githubusercontent.com/NestPress/vServer/main/static/readme/post.png?raw=true)
 
-#### Customer
-![post](https://raw.githubusercontent.com/NestPress/vServer/main/static/readme/customer.png
-?raw=true)
+#### Extended Customer (to posts relation)
+![post](https://raw.githubusercontent.com/NestPress/vServer/main/static/readme/customer.png?raw=true)
 
 ## Working with app
 

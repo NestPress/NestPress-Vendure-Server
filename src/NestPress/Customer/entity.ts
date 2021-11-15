@@ -8,5 +8,5 @@ export type ExtendedCustomer = Customer & {
   shortDescription: String;
 };
 
-// type DanceType = "Salsa" | string;
+
 

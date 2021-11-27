@@ -10,13 +10,14 @@ import { BlockService } from "../Block/service";
 export type PostInput = {
   publishAt: Date 
     expireAt: Date
-    type: PostType
+    postType: PostType
     title: string
     content: string
+    slug: string
 }
 
 export type PostsFilter = {
-    type: ListFiltersOperators<Post>;
+    postType: ListFiltersOperators<Post>;
     id: ListFiltersOperators<number>;
     category: ListFiltersOperators<PostTaxonomyValue>
     tags: ListFiltersOperators<PostTaxonomyValue>
@@ -34,6 +35,11 @@ export class PostResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { input: PostInput }
   ) {
+
+    if (args.input.slug) {
+
+    }
+
     return this.postService.createPost(ctx, args.input);
   }
 

@@ -90,7 +90,7 @@ export const extendPost = gql`
   input CreatePostInput {
     publishAt: DateTime 
     expireAt: DateTime
-    postType: PostType!
+    postType: PostType
     title: String!
     content: String
     slug: String!

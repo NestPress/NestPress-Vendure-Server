@@ -76,14 +76,10 @@ export class PostService {
   async createPost(ctx: RequestContext, input: PostInput) {
     const repository = this.connection.getRepository(ctx, Post);
 
-    console.log('DATA', input)
-
     const post = repository.create({
       ...input,
       // asset,
     });
-
-    console.log(post);
 
     return await repository.save(post);
   }

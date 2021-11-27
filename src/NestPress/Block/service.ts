@@ -80,10 +80,7 @@ export class BlockService {
     return post;
   }
   async createBlock(ctx: RequestContext, input: BlockInput) {
-      console.log('CREATE FUCKER"')
     const repository = this.connection.getRepository(ctx, Block);
-
-    console.log('INPUT', input);
 
     const post = repository.create({
       ...input,

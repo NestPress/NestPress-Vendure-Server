@@ -5,6 +5,7 @@ import { Ctx, ID, RequestContext, Transaction } from "@vendure/core";
 import { PostService } from "./service";
 import { Post, PostTaxonomyValue, PostType } from "./entity";
 import { GetListArgs, ListFiltersOperators } from "../common";
+import { BlockService } from "../Block/service";
 
 export type PostInput = {
   publishAt: Date 
@@ -25,7 +26,7 @@ export type GetPostsArgs = GetListArgs<PostsFilter>;
 
 @Resolver("Post")
 export class PostResolver {
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService, private blockService: BlockService) {}
 
   @Mutation()
   @Transaction()
@@ -73,7 +74,40 @@ export class PostResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { id: string }
   ) {
-    return this.postService.getById(ctx, args.id);
+    const post = await this.postService.getById(ctx, args.id);
+
+    const blocks = await this.blockService.getBlocks(ctx, {
+      filter: {
+        post: {
+          eq: post?.slug
+        }
+      }
+    })
+
+    return {
+      ...post,
+      blocks
+    }
   }
 
+  @Query()
+  async getPostBySlug(
+    @Ctx() ctx: RequestContext,
+    @Args() args: { slug: string }
+  ) {
+    const post = await this.postService.getBySlug(ctx, args.slug);
+
+    const blocks = await this.blockService.getBlocks(ctx, {
+      filter: {
+        post: {
+          eq: post?.slug
+        }
+      }
+    })
+
+    return {
+      ...post,
+      blocks: blocks.list
+    }
+  }
 }

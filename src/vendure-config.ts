@@ -10,6 +10,7 @@ import path from "path";
 
 /* PLUGINS */
 import { NestPress } from "./NestPress";
+import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
 
 
 export const config: VendureConfig = {
@@ -35,7 +36,7 @@ export const config: VendureConfig = {
       identifier: "superadmin",
       password: "superadmin",
     },
-    tokenMethod: "bearer",
+    tokenMethod: "cookie",
   },
   dbConnectionOptions: {
     type: "postgres",
@@ -57,6 +58,10 @@ export const config: VendureConfig = {
     AssetServerPlugin.init({
       route: "assets",
       assetUploadDir: path.join(__dirname, "../static/assets"),
+    }),
+    AdminUiPlugin.init({
+      port: 3000,
+      route: '/admin'
     }),
     DefaultJobQueuePlugin,
     DefaultSearchPlugin,

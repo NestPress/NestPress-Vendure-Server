@@ -27,6 +27,17 @@ export class PostService {
 
     return qb.getQuery().getOne();
   }
+  getBySlug(ctx: RequestContext, slug: string) {
+    const qb = this.queryCollection(ctx, {
+      filter: {
+        slug: {
+          eq: slug
+        }
+      }
+    });
+
+    return qb.getQuery().getOne();
+  }
   getPosts(ctx: RequestContext, args: GetPostsArgs = {}) {
     const qb = this.queryCollection(ctx, args);
 

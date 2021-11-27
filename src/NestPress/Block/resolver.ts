@@ -12,8 +12,8 @@ export type BlockInput = {
 };
 
 export type BlocksFilter = {
-  type: ListFiltersOperators<Block>;
-  id: ListFiltersOperators<number>;
+  post?: ListFiltersOperators<string>;
+  parentId?: ListFiltersOperators<string>;
 };
 
 export type GetBlocksArgs = GetListArgs<BlocksFilter>;

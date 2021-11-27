@@ -6,11 +6,11 @@ export interface GetListArgs<T> {
 }
 
 export interface ListFiltersOperators<T> {
-    eq: T
-    notEq: T
-    contains: T
-    notContains: T
-    in: T[]
-    notIn: T[]
-    regex: T 
+    eq?: T
+    notEq?: T
+    contains?: T
+    notContains?: T
+    in?: T[]
+    notIn?: T[]
+    regex?: T 
 }

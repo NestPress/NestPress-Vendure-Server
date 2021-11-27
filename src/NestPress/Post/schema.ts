@@ -35,6 +35,26 @@ export const extendPost = gql`
     postTags: [PostTaxonomyValue]
   }
 
+  type PostWithBlocks implements Node {
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime
+    publishAt: DateTime 
+    expireAt: DateTime
+    createdBy: Customer!
+    postType: PostType!
+    assets: Assets
+    status: PostStatus
+    title: String!
+    slug: String!
+    content: String
+    taxonomy: [PostTaxonomy]
+    relatedPosts: [RelatedPost]
+    relatedUsers: [RelatedUser]
+    blocks: [Block]
+    # contentBlocks 
+  }
+
   type Post implements Node {
     id: ID!
     createdAt: DateTime!
@@ -73,6 +93,7 @@ export const extendPost = gql`
     type: PostType!
     title: String!
     content: String
+    slug: String!
     # assets: Assets
     # taxonomy: [PostTaxonomy]
     # relatedPosts: [RelatedPost]
@@ -83,8 +104,9 @@ export const extendPost = gql`
     publishAt: DateTime 
     expireAt: DateTime
     type: PostType
-    title: String!
+    title: String
     content: String
+    slug: String
     # assets: Assets
     # taxonomy: [PostTaxonomy]
     # relatedPosts: [RelatedPost]
@@ -150,6 +172,7 @@ export const extendPost = gql`
       offset: Int
       filter: PostsFilter
     ): PostsPaginatedResult!
-    getPostById(id: ID!): Post
+    getPostById(id: ID!): PostWithBlocks
+    getPostBySlug(slug: String!): PostWithBlocks
   }
 `;

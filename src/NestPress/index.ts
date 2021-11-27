@@ -11,6 +11,9 @@ import {
 } from "./Post/entity";
 import { PostService } from "./Post/service";
 import { PostResolver } from "./Post/resolver";
+import { Block } from "./Block/entity";
+import { BlockService } from "./Block/service";
+import { BlockResolver } from "./Block/resolver";
 @VendurePlugin({
   imports: [PluginCommonModule],
   entities: [
@@ -20,22 +23,26 @@ import { PostResolver } from "./Post/resolver";
     PostTaxonomyValue,
     RelatedPost,
     RelatedUser,
+    Block
   ],
   providers: [
     PostService,
+    BlockService
     // ProfileService,
     // AddressService,
   ],
   shopApiExtensions: {
     schema: schemaExtension,
     resolvers: [
-      PostResolver
+      PostResolver,
+      BlockResolver
     ]
   },
   adminApiExtensions: {
     schema: schemaExtension,
     resolvers: [
       PostResolver,
+      BlockResolver
       // AddressResolver,
     ],
   },

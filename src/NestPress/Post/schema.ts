@@ -90,7 +90,7 @@ export const extendPost = gql`
   input CreatePostInput {
     publishAt: DateTime 
     expireAt: DateTime
-    type: PostType!
+    postType: PostType!
     title: String!
     content: String
     slug: String!
@@ -103,7 +103,7 @@ export const extendPost = gql`
   input UpdatePostInput {
     publishAt: DateTime 
     expireAt: DateTime
-    type: PostType
+    postType: PostType
     title: String
     content: String
     slug: String
@@ -153,7 +153,7 @@ export const extendPost = gql`
   }
 
   input PostsFilter {
-    type: PostTypeOperators
+    postType: PostTypeOperators
     id: IDOperators
     category: PostTaxonomyValueOperators
     tags: PostTaxonomyValueOperators

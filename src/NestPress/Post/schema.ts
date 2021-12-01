@@ -4,6 +4,8 @@ export const extendPost = gql`
   enum PostType {
     Post
     Page
+    Layout
+    Panel
     Comment
     Event
     Facet

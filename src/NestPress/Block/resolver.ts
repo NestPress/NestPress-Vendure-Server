@@ -42,7 +42,7 @@ export class BlockResolver {
 
   @Mutation()
   @Transaction()
-  async deletePost(@Ctx() ctx: RequestContext, @Args() args: { id: ID }) {
+  async deleteBlock(@Ctx() ctx: RequestContext, @Args() args: { id: string }) {
     return this.blockService.deleteBlock(ctx, args.id);
   }
 

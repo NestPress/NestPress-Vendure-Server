@@ -58,7 +58,7 @@ export class PostService {
   async deletePost(ctx: RequestContext, id: ID) {
     const repository = this.connection.getRepository(ctx, Post);
 
-    repository.softDelete(id);
+    await repository.softDelete(id);
 
     return id;
   }

@@ -1,5 +1,5 @@
 import { DeepPartial, VendureEntity } from "@vendure/core";
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Block extends VendureEntity {
@@ -9,6 +9,15 @@ export class Block extends VendureEntity {
 
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
+
+  @DeleteDateColumn()
+  deletedAt!: Date;
 
   @Column({
       nullable: true,

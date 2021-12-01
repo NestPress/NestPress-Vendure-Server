@@ -61,7 +61,7 @@ export class BlockService {
     return qb.getListWithCount(qb.getQuery());
   }
 
-  async deleteBlock(ctx: RequestContext, id: ID) {
+  async deleteBlock(ctx: RequestContext, id: string) {
     const repository = this.connection.getRepository(ctx, Block);
 
     repository.softDelete(id);

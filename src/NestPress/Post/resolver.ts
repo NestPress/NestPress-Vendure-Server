@@ -6,6 +6,7 @@ import { PostService } from "./service";
 import { Post, PostTaxonomyValue, PostType } from "./entity";
 import { GetListArgs, ListFiltersOperators } from "../common";
 import { BlockService } from "../Block/service";
+import { listWithItems } from "../advancedQuery";
 
 export type PostInput = {
   publishAt: Date 
@@ -35,11 +36,6 @@ export class PostResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { input: PostInput }
   ) {
-
-    if (args.input.slug) {
-
-    }
-
     return this.postService.createPost(ctx, args.input);
   }
 
@@ -92,7 +88,7 @@ export class PostResolver {
 
     return {
       ...post,
-      blocks
+      blocks: blocks.list ? blocks.list : []
     }
   }
 
@@ -113,7 +109,7 @@ export class PostResolver {
 
     return {
       ...post,
-      blocks: blocks.list
+      blocks: blocks.list ? blocks.list : []
     }
   }
 }

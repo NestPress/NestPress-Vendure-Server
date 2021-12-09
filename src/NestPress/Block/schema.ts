@@ -7,15 +7,17 @@ export const extendBlock = gql`
     block: String!
     post: String
     attrs: JSON
+    order: Int
   }
 
   type BlockWithChildren {
     id: String!
     parentId: String
-    block: String!
+    block: String
     post: String
     attrs: JSON
     children: [Block]
+    order: Int
   }
 
   input CreateBlockInput {
@@ -24,14 +26,16 @@ export const extendBlock = gql`
     block: String!
     post: String
     attrs: JSON
+    order: Int
   }
 
   input UpdateBlockInput {
     id: String!
-    parentId: String!
-    block: String!
+    parentId: String
+    block: String
     post: String
     attrs: JSON
+    order: Int
   }
 
   extend type Mutation {

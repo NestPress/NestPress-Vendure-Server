@@ -3,7 +3,7 @@ version: "3.3"
 services:
   db:
     image: "postgres:13.2"
-    container_name: "my_postgres2"
+    container_name: "my_postgres5"
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -14,7 +14,7 @@ services:
       - pg_data_2:/var/lib/postgresql/data/
   pgadmin:
     image: dpage/pgadmin4:5.1
-    container_name: "my_pgadmin2"
+    container_name: "my_pgadmin5"
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: root@root.com

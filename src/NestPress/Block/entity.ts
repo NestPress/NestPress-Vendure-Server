@@ -39,4 +39,10 @@ export class Block extends VendureEntity {
     default: '{}'
   })
   attrs!: any;
+
+  @Column({
+    type: 'int',
+    default: 0
+  })
+  order!: number;
 }

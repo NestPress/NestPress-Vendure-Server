@@ -55,7 +55,11 @@ export class BlockService {
     }
   }
 
-  getBlocks(ctx: RequestContext, args: GetBlocksArgs = {}) {
+  getBlocks(ctx: RequestContext, args: GetBlocksArgs = {
+    sort: {
+      order: 'ASC'
+    }
+  }) {
     const qb = this.queryCollection(ctx, args);
 
     return qb.getListWithCount(qb.getQuery());

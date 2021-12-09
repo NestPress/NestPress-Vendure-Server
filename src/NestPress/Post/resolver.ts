@@ -83,6 +83,9 @@ export class PostResolver {
         post: {
           eq: post?.slug
         }
+      },
+      sort: {
+        order: 'ASC'
       }
     })
 

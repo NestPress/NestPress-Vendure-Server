@@ -3,6 +3,7 @@ import { ID, RequestContext, TransactionalConnection } from "@vendure/core";
 import { GetPostsArgs, PostInput, PostsFilter } from "./resolver";
 import { Post } from "./entity";
 import { createAdvancedQuery, AdvancedQueryResult } from "../advancedQuery";
+import * as uuid from 'uuid';
 
 @Injectable()
 export class PostService {
@@ -57,6 +58,11 @@ export class PostService {
 
   async deletePost(ctx: RequestContext, id: ID) {
     const repository = this.connection.getRepository(ctx, Post);
+
+    const post = await repository.findOneOrFail(id);
+
+    post.slug = `${post.slug}-${uuid.v4()}`;
+    await repository.save(post);
 
     await repository.softDelete(id);
 

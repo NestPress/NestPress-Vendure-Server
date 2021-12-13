@@ -80,6 +80,7 @@ export const extendBlock = gql`
       limit: Int
       offset: Int
       filter: BlocksFilter
+      sort: JSON
     ): BlocksPaginatedResult!
 
     getBlockById(id: String!): Block

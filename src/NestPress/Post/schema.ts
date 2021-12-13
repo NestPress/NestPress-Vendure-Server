@@ -173,6 +173,7 @@ export const extendPost = gql`
       limit: Int
       offset: Int
       filter: PostsFilter
+      sort: JSON
     ): PostsPaginatedResult!
     getPostById(id: ID!): PostWithBlocks
     getPostBySlug(slug: String!): PostWithBlocks

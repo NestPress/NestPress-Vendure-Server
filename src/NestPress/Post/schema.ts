@@ -98,8 +98,8 @@ export const extendPost = gql`
     slug: String!
     # assets: Assets
     # taxonomy: [PostTaxonomy]
-    # relatedPosts: [RelatedPost]
-    # relatedUsers: [RelatedUser]
+    relatedPosts: [RelatedPost]
+    relatedUsers: [RelatedUser]
   }
 
   input UpdatePostInput {
@@ -111,8 +111,8 @@ export const extendPost = gql`
     slug: String
     # assets: Assets
     # taxonomy: [PostTaxonomy]
-    # relatedPosts: [RelatedPost]
-    # relatedUsers: [RelatedUser]
+    relatedPosts: [RelatedPost]
+    relatedUsers: [RelatedUser]
   }
 
   extend type Mutation {

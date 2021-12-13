@@ -77,10 +77,14 @@ export class Post extends VendureEntity {
     @OneToMany(() => PostTaxonomy, taxonomy => taxonomy.posts)
     @JoinColumn()
     taxonomy!: PostTaxonomy[]
-    @OneToMany(() => RelatedPost, relatedPost=>relatedPost.post)
+    @OneToMany(() => RelatedPost, relatedPost=>relatedPost.post, {
+      cascade: true
+    })
     @JoinColumn()
     relatedPosts!: RelatedPost[]
-    @OneToMany(() => RelatedUser, relatedUser=>relatedUser.post)
+    @OneToMany(() => RelatedUser, relatedUser=>relatedUser.post, {
+      cascade: true
+    })
     @JoinColumn()
     relatedUsers!: RelatedUser[]
 

@@ -76,8 +76,20 @@ export const extendPost = gql`
     # contentBlocks 
   }
 
+  input RelatedPostInput {
+    postID: ID!
+    relationType: String!
+    customFields: JSON
+  }
+
   type RelatedPost {
     post: Post!
+    relationType: String!
+    customFields: JSON
+  }
+
+  input RelatedUserInput {
+    userID: ID!
     relationType: String!
     customFields: JSON
   }
@@ -98,8 +110,8 @@ export const extendPost = gql`
     slug: String!
     # assets: Assets
     # taxonomy: [PostTaxonomy]
-    relatedPosts: [RelatedPost]
-    relatedUsers: [RelatedUser]
+    relatedPosts: [RelatedPostInput]
+    relatedUsers: [RelatedUserInput]
   }
 
   input UpdatePostInput {
@@ -111,8 +123,8 @@ export const extendPost = gql`
     slug: String
     # assets: Assets
     # taxonomy: [PostTaxonomy]
-    relatedPosts: [RelatedPost]
-    relatedUsers: [RelatedUser]
+    relatedPosts: [RelatedPostInput]
+    relatedUsers: [RelatedUserInput]
   }
 
   extend type Mutation {

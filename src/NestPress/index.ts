@@ -14,6 +14,8 @@ import { PostResolver } from "./Post/resolver";
 import { Block } from "./Block/entity";
 import { BlockService } from "./Block/service";
 import { BlockResolver } from "./Block/resolver";
+import { NestPressCustomerService } from "./Customer/service";
+import { CustomerResolver } from "./Customer/resolver";
 @VendurePlugin({
   imports: [PluginCommonModule],
   entities: [
@@ -27,7 +29,8 @@ import { BlockResolver } from "./Block/resolver";
   ],
   providers: [
     PostService,
-    BlockService
+    BlockService,
+    NestPressCustomerService
     // ProfileService,
     // AddressService,
   ],
@@ -35,7 +38,8 @@ import { BlockResolver } from "./Block/resolver";
     schema: schemaExtension,
     resolvers: [
       PostResolver,
-      BlockResolver
+      BlockResolver,
+      CustomerResolver
     ]
   },
   adminApiExtensions: {

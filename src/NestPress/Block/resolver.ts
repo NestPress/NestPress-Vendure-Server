@@ -5,11 +5,16 @@ import { Block } from "./entity";
 import { BlockService } from "./service";
 
 export type BlockInput = {
+  id?: string;
   parentId: string;
   block: string;
   post?: string;
   attrs: any;
 };
+
+export type BlocksInput = {
+  blocks: BlockInput[]
+}
 
 export type BlocksFilter = {
   post?: ListFiltersOperators<string>;
@@ -33,6 +38,15 @@ export class BlockResolver {
 
   @Mutation()
   @Transaction()
+  async createBlocks(
+    @Ctx() ctx: RequestContext,
+    @Args() args: { input: BlocksInput }
+  ) {
+    return this.blockService.createBlocks(ctx, args.input);
+  }
+
+  @Mutation()
+  @Transaction()
   async updateBlock(
     @Ctx() ctx: RequestContext,
     @Args() args: { id: ID; input: BlockInput }
@@ -42,8 +56,23 @@ export class BlockResolver {
 
   @Mutation()
   @Transaction()
+  async updateBlocks(
+    @Ctx() ctx: RequestContext,
+    @Args() args: { input: BlocksInput }
+  ) {
+    return this.blockService.updateBlocks(ctx, args.input);
+  }
+
+  @Mutation()
+  @Transaction()
   async deleteBlock(@Ctx() ctx: RequestContext, @Args() args: { id: string }) {
     return this.blockService.deleteBlock(ctx, args.id);
+  }
+
+  @Mutation()
+  @Transaction()
+  async deleteBlocks(@Ctx() ctx: RequestContext, @Args() args: { input: { blocks: string[] } }) {
+    return this.blockService.deleteBlocks(ctx, args.input);
   }
 
   @Query()

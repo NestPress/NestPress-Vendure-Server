@@ -1,13 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { ID, RequestContext, TransactionalConnection } from "@vendure/core";
-import { GetBlocksArgs, BlocksFilter, BlockInput } from "./resolver";
+import { GetBlocksArgs, BlocksFilter, BlockInput, BlocksInput } from "./resolver";
 import { Block } from "./entity";
 import { createAdvancedQuery, AdvancedQueryResult } from "../advancedQuery";
 
 @Injectable()
 export class BlockService {
   private queryCollection: AdvancedQueryResult<Block, any>;
-
+  
   constructor(private connection: TransactionalConnection) {
     this.queryCollection = createAdvancedQuery({
       connection,
@@ -16,6 +16,7 @@ export class BlockService {
       fullTextSearch: {}
     });
   }
+
   getById(ctx: RequestContext, id: string) {
     const qb = this.queryCollection(ctx, {
       filter: {
@@ -68,10 +69,22 @@ export class BlockService {
   async deleteBlock(ctx: RequestContext, id: string) {
     const repository = this.connection.getRepository(ctx, Block);
 
-    repository.softDelete(id);
-
+    repository.delete(id);
+    
     return id;
   }
+
+  async deleteBlocks(ctx: RequestContext, input: { blocks: string[]; }) {
+    let result = [];
+
+    for (let i = 0; i < input.blocks.length; i++)
+    {
+      result.push(await this.deleteBlock(ctx, input.blocks[i]));
+    }
+
+    return result;
+  }
+
   async updateBlock(ctx: RequestContext, id: ID, input: BlockInput) {
     const repository = this.connection.getRepository(ctx, Block);
 
@@ -83,6 +96,16 @@ export class BlockService {
 
     return post;
   }
+  async updateBlocks(ctx: RequestContext, input: BlocksInput) {
+    let result = [];
+
+    for (let i = 0; i < input.blocks.length; i++)
+    {
+      result.push(await this.updateBlock(ctx, input.blocks[i].id!, input.blocks[i]));
+    }
+
+    return result;
+  }
   async createBlock(ctx: RequestContext, input: BlockInput) {
     const repository = this.connection.getRepository(ctx, Block);
 
@@ -90,5 +113,16 @@ export class BlockService {
       ...input,
     });
     return await repository.save(post);
+  }
+
+  async createBlocks(ctx: RequestContext, input: BlocksInput) {
+    let result = [];
+
+    for (let i = 0; i < input.blocks.length; i++)
+    {
+      result.push(await this.createBlock(ctx, input.blocks[i]));
+    }
+
+    return result;
   }
 }

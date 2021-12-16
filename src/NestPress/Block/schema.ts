@@ -38,10 +38,25 @@ export const extendBlock = gql`
     order: Int
   }
 
+  input CreateBlocksInput {
+    blocks: [CreateBlockInput]!
+  }
+
+  input UpdateBlocksInput {
+    blocks: [UpdateBlockInput]!
+  }
+
+  input DeleteBlocksInput {
+    blocks: [String]!
+  }
+
   extend type Mutation {
     createBlock(input: CreateBlockInput): Block
+    createBlocks(input: CreateBlocksInput): [Block]
     updateBlock(id: String!, input: UpdateBlockInput): Block
-    deleteBlock(id: String!): String 
+    updateBlocks(input: UpdateBlocksInput): [Block]
+    deleteBlock(id: String!): String
+    deleteBlocks(input: DeleteBlocksInput): [String]
   }
 
   input BlockIDOperators {

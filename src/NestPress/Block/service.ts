@@ -69,7 +69,7 @@ export class BlockService {
   async deleteBlock(ctx: RequestContext, id: string) {
     const repository = this.connection.getRepository(ctx, Block);
 
-    repository.delete(id);
+    await repository.delete(id);
     
     return id;
   }

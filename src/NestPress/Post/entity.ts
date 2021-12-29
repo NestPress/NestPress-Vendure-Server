@@ -46,12 +46,15 @@ export class Post extends VendureEntity {
       nullable: true
     })
     publishAt?: Date 
+
     @Column({
       nullable: true
     })
     expireAt?: Date
+
     @OneToOne(() => Customer)
     createdBy!: Customer
+
     @Column({
       default: 'Post'
     })
@@ -64,24 +67,42 @@ export class Post extends VendureEntity {
       default: 'Draft'
     })
     status!: PostStatus
+  
     @Column()
     title!: string
+  
     @Column({
       nullable: true
     })
     slug!: string
+  
     @Column({
       nullable: true
     })
     content?: string
+
+    @Column({
+      type: 'varchar',
+      nullable: true
+    })
+    customType?: string | null;
+
+    @Column({
+      type: 'simple-json',
+      nullable: true
+    })
+    customFields?: any | null;
+  
     @OneToMany(() => PostTaxonomy, taxonomy => taxonomy.posts)
     @JoinColumn()
     taxonomy!: PostTaxonomy[]
+  
     @OneToMany(() => RelatedPost, relatedPost=>relatedPost.post, {
       cascade: true
     })
     @JoinColumn()
     relatedPosts!: RelatedPost[]
+  
     @OneToMany(() => RelatedUser, relatedUser=>relatedUser.post, {
       cascade: true
     })

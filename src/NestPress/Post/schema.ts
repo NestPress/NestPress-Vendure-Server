@@ -45,6 +45,8 @@ export const extendPost = gql`
     expireAt: DateTime
     createdBy: Customer!
     postType: PostType!
+    customType: String
+    customFields: JSON
     assets: Assets
     status: PostStatus
     title: String!
@@ -65,6 +67,8 @@ export const extendPost = gql`
     expireAt: DateTime
     createdBy: Customer!
     postType: PostType!
+    customType: String
+    customFields: JSON
     assets: Assets
     status: PostStatus
     title: String!
@@ -105,6 +109,8 @@ export const extendPost = gql`
     publishAt: DateTime 
     expireAt: DateTime
     postType: PostType
+    customType: String
+    customFields: JSON
     title: String!
     content: String
     slug: String!
@@ -121,6 +127,8 @@ export const extendPost = gql`
     title: String
     content: String
     slug: String
+    customType: String
+    customFields: JSON
     # assets: Assets
     # taxonomy: [PostTaxonomy]
     relatedPosts: [RelatedPostInput]
@@ -156,6 +164,11 @@ export const extendPost = gql`
     regex: ID
   }
 
+  input JSONOperators {
+    eq: JSON
+    notEq: JSON
+  }
+
   input PostTaxonomyValueOperators {
     eq: PostTaxonomyValueInput
     notEq: PostTaxonomyValueInput
@@ -172,6 +185,8 @@ export const extendPost = gql`
     category: PostTaxonomyValueOperators
     tags: PostTaxonomyValueOperators
     title: StringOperators
+    customType: StringOperators
+    customFields: JSONOperators
   }
 
   type PostsPaginatedResult {

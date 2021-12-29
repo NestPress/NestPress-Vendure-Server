@@ -26,6 +26,12 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     links:
       - "db:pgsql-server"
+  maildev:
+    image: maildev/maildev
+    container_name: "maildev5"
+    ports:
+      - '1080:80'
+      - '1025:25'
 
 volumes:
   pg_data_2:

@@ -1,15 +1,15 @@
 import gql from "graphql-tag";
 export const extendPost = gql`
-
   enum PostType {
-    Post
-    Page
-    Layout
-    Panel
     Comment
     Event
     Facet
+    Layout
     Meta
+    Page
+    Panel
+    Post
+    Reusable
   }
 
   enum PostStatus {
@@ -19,7 +19,6 @@ export const extendPost = gql`
     Archive
     Trash
   }
-
 
   type PostTaxonomyValue {
     id: ID!
@@ -41,7 +40,7 @@ export const extendPost = gql`
     id: ID!
     createdAt: DateTime!
     updatedAt: DateTime
-    publishAt: DateTime 
+    publishAt: DateTime
     expireAt: DateTime
     createdBy: Customer!
     postType: PostType!
@@ -56,14 +55,14 @@ export const extendPost = gql`
     relatedPosts: [RelatedPost]
     relatedUsers: [RelatedUser]
     blocks: [Block]
-    # contentBlocks 
+    # contentBlocks
   }
 
   type Post implements Node {
     id: ID!
     createdAt: DateTime!
     updatedAt: DateTime
-    publishAt: DateTime 
+    publishAt: DateTime
     expireAt: DateTime
     createdBy: Customer!
     postType: PostType!
@@ -77,7 +76,7 @@ export const extendPost = gql`
     taxonomy: [PostTaxonomy]
     relatedPosts: [RelatedPost]
     relatedUsers: [RelatedUser]
-    # contentBlocks 
+    # contentBlocks
   }
 
   input RelatedPostInput {
@@ -104,9 +103,8 @@ export const extendPost = gql`
     customFields: JSON
   }
 
-
   input CreatePostInput {
-    publishAt: DateTime 
+    publishAt: DateTime
     expireAt: DateTime
     postType: PostType
     customType: String
@@ -121,7 +119,7 @@ export const extendPost = gql`
   }
 
   input UpdatePostInput {
-    publishAt: DateTime 
+    publishAt: DateTime
     expireAt: DateTime
     postType: PostType
     title: String
@@ -137,10 +135,10 @@ export const extendPost = gql`
 
   extend type Mutation {
     createPost(input: CreatePostInput): Post
-    updatePost(id: ID!,input: UpdatePostInput): Post
-    changePostStatus(id: ID!, status:PostStatus!): Post
-    changePostSlug(id: ID!, slug:String!): Post
-    deletePost(id: ID!): ID 
+    updatePost(id: ID!, input: UpdatePostInput): Post
+    changePostStatus(id: ID!, status: PostStatus!): Post
+    changePostSlug(id: ID!, slug: String!): Post
+    deletePost(id: ID!): ID
   }
 
   input PostTypeOperators {
@@ -152,7 +150,6 @@ export const extendPost = gql`
     notIn: [PostType!]
     regex: PostType
   }
-
 
   input IDOperators {
     eq: ID
@@ -176,7 +173,7 @@ export const extendPost = gql`
     notContains: PostTaxonomyValueInput
     in: [PostTaxonomyValueInput!]
     notIn: [PostTaxonomyValueInput!]
-    regex: PostTaxonomyValueInput 
+    regex: PostTaxonomyValueInput
   }
 
   input PostsFilter {

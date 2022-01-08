@@ -207,7 +207,7 @@ export const extendPost = gql`
   }
 
   type PostsPaginatedResult {
-    list: [Post]!
+    list: [PostWithBlocks]!
     totalItems: Int!
   }
 

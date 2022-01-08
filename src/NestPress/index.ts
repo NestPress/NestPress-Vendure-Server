@@ -4,24 +4,24 @@ import { schemaExtension } from "./schema";
 import { CUSTOM_PERMISSION_ARR } from "./Permission/customPermission";
 import {
   Post,
-  PostTaxonomy,
-  PostTaxonomyValue,
   RelatedPost,
   RelatedUser,
-} from "./Post/entity";
-import { PostService } from "./Post/service";
-import { PostResolver } from "./Post/resolver";
+} from "./Post/post.entity";
+import { PostService } from "./Post/post.service";
+import { PostResolver } from "./Post/post.resolver";
 import { Block } from "./Block/entity";
 import { BlockService } from "./Block/service";
 import { BlockResolver } from "./Block/resolver";
 import { NestPressCustomerService } from "./Customer/service";
 import { CustomerResolver } from "./Customer/resolver";
+import { TaxonomyValueResolver } from "./Post/taxonomy-value.resolver";
+import { TaxonomyValueService } from "./Post/taxonomy-value.service";
+import { PostTaxonomyValue } from "./Post/taxonomy-value.entity";
 @VendurePlugin({
   imports: [PluginCommonModule],
   entities: [
     // Profile,
     Post,
-    PostTaxonomy,
     PostTaxonomyValue,
     RelatedPost,
     RelatedUser,
@@ -30,6 +30,7 @@ import { CustomerResolver } from "./Customer/resolver";
   providers: [
     PostService,
     BlockService,
+    TaxonomyValueService,
     NestPressCustomerService
     // ProfileService,
     // AddressService,
@@ -39,6 +40,7 @@ import { CustomerResolver } from "./Customer/resolver";
     resolvers: [
       PostResolver,
       BlockResolver,
+      TaxonomyValueResolver,
       CustomerResolver
     ]
   },

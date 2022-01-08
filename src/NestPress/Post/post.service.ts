@@ -1,9 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { ID, RequestContext, TransactionalConnection } from "@vendure/core";
-import { GetPostsArgs, PostInput, PostsFilter } from "./resolver";
-import { Post } from "./entity";
+import { GetPostsArgs, PostInput, PostsFilter } from "./post.resolver";
+import { Post } from "./post.entity";
 import { createAdvancedQuery, AdvancedQueryResult } from "../advancedQuery";
 import * as uuid from 'uuid';
+import { PostTaxonomyValue } from "./taxonomy-value.entity";
 
 @Injectable()
 export class PostService {
@@ -13,8 +14,11 @@ export class PostService {
     this.queryCollection = createAdvancedQuery({
       connection,
       entity: Post,
-      relations: ["relatedPosts", "relatedUsers"],
-      fullTextSearch: {}
+      relations: ["relatedPosts", "relatedUsers", "postTaxonomies"],
+      fullTextSearch: {},
+      customFilterPropertyMap: {
+        postTaxonomiesId: "postTaxonomies.id"
+      },
     });
   }
   getById(ctx: RequestContext, id: string) {
@@ -71,13 +75,15 @@ export class PostService {
   async updatePost(ctx: RequestContext, id: ID, input: PostInput) {
     const repository = this.connection.getRepository(ctx, Post);
 
-    await repository.update(id, {
-      ...input
-    });
+    await repository.findOneOrFail(id);
 
     const post = await repository.findOneOrFail(id);
 
-    return post;
+    const updatingPost = Object.assign(post, input);
+
+    await this.mapTaxonomiesInputsToEntities(input, updatingPost);
+
+    return await repository.save(updatingPost);
   }
   async createPost(ctx: RequestContext, input: PostInput) {
     const repository = this.connection.getRepository(ctx, Post);
@@ -87,6 +93,23 @@ export class PostService {
       // asset,
     });
 
+    await this.mapTaxonomiesInputsToEntities(input, post);
+
     return await repository.save(post);
+  }
+
+  private async mapTaxonomiesInputsToEntities(input: PostInput, post: Post) {
+    if (input.postTaxonomies) {
+      const postTaxonomiesRepo = this.connection.getRepository(PostTaxonomyValue);
+      for (let i = 0; i < input.postTaxonomies.length; i++) {
+        await postTaxonomiesRepo.findOneOrFail(input.postTaxonomies[i]);
+      }
+
+      post.postTaxonomies = input.postTaxonomies.map((id) => {
+        return {
+          id
+        };
+      }) as any;
+    }
   }
 }

@@ -2,26 +2,27 @@ import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 
 import { Ctx, ID, RequestContext, Transaction } from "@vendure/core";
 
-import { PostService } from "./service";
-import { Post, PostTaxonomyValue, PostType } from "./entity";
+import { PostService } from "./post.service";
+import { Post, PostType } from "./post.entity";
 import { GetListArgs, ListFiltersOperators } from "../common";
 import { BlockService } from "../Block/service";
-import { listWithItems } from "../advancedQuery";
+import { PostTaxonomyValue } from "./taxonomy-value.entity";
 
 export type PostInput = {
   publishAt: Date 
-    expireAt: Date
-    postType: PostType
-    title: string
-    content: string
-    slug: string
+  expireAt: Date
+  postType: PostType
+  title: string
+  content: string
+  slug: string
+  postTaxonomies: []
 }
 
 export type PostsFilter = {
-    postType: ListFiltersOperators<Post>;
-    id: ListFiltersOperators<number>;
-    category: ListFiltersOperators<PostTaxonomyValue>
-    tags: ListFiltersOperators<PostTaxonomyValue>
+  postType: ListFiltersOperators<Post>;
+  id: ListFiltersOperators<number>;
+  category: ListFiltersOperators<PostTaxonomyValue>
+  tags: ListFiltersOperators<PostTaxonomyValue>
 }
 
 export type GetPostsArgs = GetListArgs<PostsFilter>;

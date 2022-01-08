@@ -20,20 +20,18 @@ export const extendPost = gql`
     Trash
   }
 
+  enum PostTaxonomyType {
+    Category
+    Tags
+  }
+
   type PostTaxonomyValue {
     id: ID!
     key: String
     value: String
+    type: PostTaxonomyType
     parent: PostTaxonomyValue!
-  }
-
-  input PostTaxonomyValueInput {
-    id: ID!
-  }
-
-  type PostTaxonomy {
-    postCategories: [PostTaxonomyValue]
-    postTags: [PostTaxonomyValue]
+    taxonomiesPosts: [PostTaxonomyValue]
   }
 
   type PostWithBlocks implements Node {
@@ -51,11 +49,11 @@ export const extendPost = gql`
     title: String!
     slug: String!
     content: String
-    taxonomy: [PostTaxonomy]
     relatedPosts: [RelatedPost]
     relatedUsers: [RelatedUser]
     blocks: [Block]
     # contentBlocks
+    postTaxonomies: [PostTaxonomyValue]
   }
 
   type Post implements Node {
@@ -73,10 +71,10 @@ export const extendPost = gql`
     title: String!
     slug: String!
     content: String
-    taxonomy: [PostTaxonomy]
     relatedPosts: [RelatedPost]
     relatedUsers: [RelatedUser]
     # contentBlocks
+    postTaxonomies: [PostTaxonomyValue]
   }
 
   input RelatedPostInput {
@@ -113,9 +111,9 @@ export const extendPost = gql`
     content: String
     slug: String!
     # assets: Assets
-    # taxonomy: [PostTaxonomy]
     relatedPosts: [RelatedPostInput]
     relatedUsers: [RelatedUserInput]
+    postTaxonomies: [ID]
   }
 
   input UpdatePostInput {
@@ -128,17 +126,9 @@ export const extendPost = gql`
     customType: String
     customFields: JSON
     # assets: Assets
-    # taxonomy: [PostTaxonomy]
     relatedPosts: [RelatedPostInput]
     relatedUsers: [RelatedUserInput]
-  }
-
-  extend type Mutation {
-    createPost(input: CreatePostInput): Post
-    updatePost(id: ID!, input: UpdatePostInput): Post
-    changePostStatus(id: ID!, status: PostStatus!): Post
-    changePostSlug(id: ID!, slug: String!): Post
-    deletePost(id: ID!): ID
+    postTaxonomies: [ID]
   }
 
   input PostTypeOperators {
@@ -166,21 +156,51 @@ export const extendPost = gql`
     notEq: JSON
   }
 
+  input PostTaxonomyTypeOperators {
+    eq: PostTaxonomyType
+    notEq: PostTaxonomyType
+    contains: PostTaxonomyType
+    notContains: PostTaxonomyType
+    in: [PostTaxonomyType!]
+    notIn: [PostTaxonomyType!]
+    regex: PostTaxonomyType
+  }
+
+  input CreatePostTaxonomyValueInput {
+    key: String
+    value: String
+    type: PostTaxonomyType!
+    parent: ID
+  }
+
+  input UpdatePostTaxonomyValueInput {
+    key: String
+    value: String
+    parent: ID
+    type: PostTaxonomyType
+  }
+
+  input PostTaxonomyValueSingleOperator {
+    id: ID
+    key: String
+    value: String
+    parent: ID
+    type: PostTaxonomyType
+  }
+
   input PostTaxonomyValueOperators {
-    eq: PostTaxonomyValueInput
-    notEq: PostTaxonomyValueInput
-    contains: PostTaxonomyValueInput
-    notContains: PostTaxonomyValueInput
-    in: [PostTaxonomyValueInput!]
-    notIn: [PostTaxonomyValueInput!]
-    regex: PostTaxonomyValueInput
+    eq: PostTaxonomyValueSingleOperator
+    notEq: PostTaxonomyValueSingleOperator
+    contains: PostTaxonomyValueSingleOperator
+    notContains: PostTaxonomyValueSingleOperator
+    in: [PostTaxonomyValueSingleOperator!]
+    notIn: [PostTaxonomyValueSingleOperator!]
   }
 
   input PostsFilter {
     postType: PostTypeOperators
     id: IDOperators
-    category: PostTaxonomyValueOperators
-    tags: PostTaxonomyValueOperators
+    postTaxonomiesId: IDOperators
     title: StringOperators
     customType: StringOperators
     customFields: JSONOperators
@@ -189,6 +209,18 @@ export const extendPost = gql`
   type PostsPaginatedResult {
     list: [Post]!
     totalItems: Int!
+  }
+
+  type PostTaxonomyValuesPaginatedResult {
+    list: [PostTaxonomyValue]!
+    totalItems: Int!
+  }
+
+  input PostTaxonomyValueFilter {
+    key: StringOperators
+    value: StringOperators
+    parent: IDOperators
+    type: PostTaxonomyTypeOperators
   }
 
   extend type Query {
@@ -201,5 +233,26 @@ export const extendPost = gql`
     ): PostsPaginatedResult!
     getPostById(id: ID!): PostWithBlocks
     getPostBySlug(slug: String!): PostWithBlocks
+
+    getPostTaxonomyValues(
+      query: String
+      limit: Int
+      offset: Int
+      filter: PostTaxonomyValueFilter
+      sort: JSON
+    ): PostTaxonomyValuesPaginatedResult!
+    getPostTaxonomyValueById(id: ID!): PostTaxonomyValue
+  }
+
+  extend type Mutation {
+    createPost(input: CreatePostInput): Post
+    updatePost(id: ID!, input: UpdatePostInput): Post
+    changePostStatus(id: ID!, status: PostStatus!): Post
+    changePostSlug(id: ID!, slug: String!): Post
+    deletePost(id: ID!): ID
+
+    createPostTaxonomyValue(input: CreatePostTaxonomyValueInput): PostTaxonomyValue
+    updatePostTaxonomyValue(id: ID!, input: UpdatePostTaxonomyValueInput): PostTaxonomyValue
+    deletePostTaxonomyValue(id: ID!): ID
   }
 `;

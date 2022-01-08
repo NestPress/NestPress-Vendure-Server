@@ -109,7 +109,7 @@ export const extendPost = gql`
     customFields: JSON
     title: String!
     content: String
-    slug: String!
+    slug: String
     # assets: Assets
     relatedPosts: [RelatedPostInput]
     relatedUsers: [RelatedUserInput]

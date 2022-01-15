@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "run:server": "ts-node ./src/index.ts",
-    "run:worker": "ts-node ./src/index-worker.ts",
-    "dev:server": "ts-node-dev --respawn ./src/index.ts",
-    "dev:worker": "ts-node-dev ./src/index-worker.ts",
+    "run:server": "./node_modules/.bin/ts-node ./src/index.ts",
+    "run:worker": "./node_modules/.bin/ts-node ./src/index-worker.ts",
+    "dev:server": "./node_modules/.bin/ts-node-dev --respawn ./src/index.ts",
+    "dev:worker": "./node_modules/.bin/ts-node-dev ./src/index-worker.ts",
     "start": "./node_modules/.bin/concurrently yarn:run:*",
     "build": "tsc",
     "dev": "concurrently yarn:dev:*",
     "migration:generate": "ts-node migration generate",
-    "migration:run": "ts-node migration run",
-    "migration:revert": "ts-node migration revert",
-    "schema:generate": "ts-node generate-schema"
+    "migration:run": "./node_modules/.bin/ts-node migration run",
+    "migration:revert": "./node_modules/.bin/ts-node migration revert",
+    "schema:generate": "./node_modules/.bin/ts-node generate-schema"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.17",

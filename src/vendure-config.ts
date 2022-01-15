@@ -56,7 +56,7 @@ export const config: VendureConfig = {
     },
     tokenMethod: "cookie",
   },
-  dbConnectionOptions: {
+  dbConnectionOptions: isDevelopment ? {
     type: "postgres",
     synchronize: true, // turn this off for production
     logging: false,
@@ -65,6 +65,11 @@ export const config: VendureConfig = {
     port: 5432,
     username: "postgres",
     password: "postgres",
+    migrations: [path.join(__dirname, "../migrations/*.ts")],
+  } : {
+    type: 'postgres',
+    synchronize: true,
+    url: process.env.DATABASE_URL,
     migrations: [path.join(__dirname, "../migrations/*.ts")],
   },
   paymentOptions: {

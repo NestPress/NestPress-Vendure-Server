@@ -2414,10 +2414,10 @@
     rxjs "^6.6.3"
     typeorm "0.2.31"
 
-"@vendure/email-plugin@1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@vendure/email-plugin/-/email-plugin-1.3.1.tgz#300da7c5c964e99a3fa94a75552672b74764f82f"
-  integrity sha512-SfWYdzKVOjVp8IoOzgc45u7ttXzZGN9jQAJf+t9jEhcWBaA1D112dTSb06rVYmE93mZluRyMi2w7262q1dwxPg==
+"@vendure/email-plugin@^1.4.4":
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/@vendure/email-plugin/-/email-plugin-1.4.4.tgz#c17a668c651de71cd6d0112cc79a2b87dbcb54b3"
+  integrity sha512-7LIX+qtcqyaPAgPjXAqv3izb4XQn9aj2q8ZILGY183sl+MlKbgSLs0rhcjbVgKt6i5XgPX3g++7z0yTxhiJ+0A==
   dependencies:
     "@types/nodemailer" "^6.4.0"
     dateformat "^3.0.3"

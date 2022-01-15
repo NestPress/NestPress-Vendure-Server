@@ -71,6 +71,9 @@ export const config: VendureConfig = {
     synchronize: true,
     url: process.env.DATABASE_URL,
     migrations: [path.join(__dirname, "../migrations/*.ts")],
+    ssl: {
+      rejectUnauthorized: false
+    }
   },
   paymentOptions: {
     paymentMethodHandlers: [dummyPaymentHandler],

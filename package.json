@@ -13,8 +13,7 @@
     "migration:generate": "ts-node migration generate",
     "migration:run": "ts-node migration run",
     "migration:revert": "ts-node migration revert",
-    "schema:generate": "ts-node generate-schema",
-    "postinstall": "yarn run migration:run"
+    "schema:generate": "ts-node generate-schema"
   },
   "dependencies": {
     "@nestjs/common": "^8.1.2",

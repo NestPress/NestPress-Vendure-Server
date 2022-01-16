@@ -14,7 +14,8 @@
     "migration:run": "./node_modules/.bin/ts-node migration run",
     "migration:revert": "./node_modules/.bin/ts-node migration revert",
     "schema:generate": "./node_modules/.bin/ts-node generate-schema",
-    "copy-static": "node ./scripts/copy-static"
+    "copy-static": "node ./scripts/copy-static",
+    "generate-tailwind": "ts-node ./scripts/generate-tailwind.ts"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.17",

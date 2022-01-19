@@ -78,12 +78,13 @@ export const extendPost = gql`
   }
 
   input RelatedPostInput {
-    postID: ID!
+    post: ID!
     relationType: String!
     customFields: JSON
   }
 
   type RelatedPost {
+    id: ID!
     post: Post!
     relationType: String!
     customFields: JSON
@@ -225,6 +226,31 @@ export const extendPost = gql`
     type: PostTaxonomyTypeOperators
   }
 
+  input CreateRelatedPostInput {
+    post: ID!
+    relationType: String!
+    customFields: JSON
+  }
+
+  input UpdateRelatedPostInput {
+    id: ID!
+    post: ID!
+    relationType: String!
+    customFields: JSON
+  }
+
+  type RelatedPostsPaginatedResult {
+    list: [RelatedPost]!
+    totalItems: Int!
+  }
+
+  input RelatedPostFilter {
+    id: IDOperators
+    postId: IDOperators
+    relationType: StringOperators
+    customFields: JSONOperators
+  }
+
   extend type Query {
     getPosts(
       query: String
@@ -244,6 +270,15 @@ export const extendPost = gql`
       sort: JSON
     ): PostTaxonomyValuesPaginatedResult!
     getPostTaxonomyValueById(id: ID!): PostTaxonomyValue
+
+    getRelatedPosts(
+      query: String
+      limit: Int
+      offset: Int
+      filter: RelatedPostFilter
+      sort: JSON
+    ): RelatedPostsPaginatedResult!
+    getRelatedPostById(id: ID!): RelatedPost
   }
 
   extend type Mutation {
@@ -261,5 +296,9 @@ export const extendPost = gql`
       input: UpdatePostTaxonomyValueInput
     ): PostTaxonomyValue
     deletePostTaxonomyValue(id: ID!): ID
+
+    createRelatedPost(input: CreateRelatedPostInput): RelatedPost
+    updateRelatedPost(id: ID!, input: UpdateRelatedPostInput): RelatedPost
+    deleteRelatedPost(id: ID!): ID
   }
 `;

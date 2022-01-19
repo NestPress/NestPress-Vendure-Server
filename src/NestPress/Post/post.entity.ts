@@ -1,4 +1,4 @@
-import { VendureEntity, ID, Asset, Customer } from "@vendure/core";
+import { VendureEntity, ID, Asset, Customer, DeepPartial } from "@vendure/core";
 import {
   Column,
   Entity,
@@ -16,8 +16,8 @@ import {
   ManyToMany,
   JoinTable,
 } from "typeorm";
-import { DeepPartial } from "@vendure/common/lib/shared-types";
 import { PostTaxonomyValue } from "./taxonomy-value.entity";
+import { RelatedPost } from "./related-post.entity";
 
 // type InventoryProductInput = Omit<InventoryAmount, "product"> & {
 //   product: ID;
@@ -105,51 +105,10 @@ export class Post extends VendureEntity {
   @JoinColumn()
   relatedPosts!: RelatedPost[];
 
-  @OneToMany(() => RelatedUser, (relatedUser) => relatedUser.post, {
-    cascade: true,
-  })
-  @JoinColumn()
-  relatedUsers!: RelatedUser[];
-
   @ManyToMany(
     () => PostTaxonomyValue,
     (postTaxonomy) => postTaxonomy.taxonomiesPosts
   )
   @JoinTable()
   postTaxonomies!: PostTaxonomyValue[];
-}
-
-export class RelatedEntity extends VendureEntity {
-  constructor(input?: DeepPartial<Post>) {
-    super(input);
-  }
-  @PrimaryGeneratedColumn()
-  id!: number;
-  @Column()
-  relationType!: string;
-  @Column({
-    type: "simple-json",
-  })
-  customFields?: any;
-}
-
-@Entity()
-export class RelatedPost extends RelatedEntity {
-  constructor(input?: DeepPartial<Post>) {
-    super(input);
-  }
-
-  @ManyToOne(() => Post, (post) => post.relatedPosts)
-  @JoinColumn()
-  post!: Post;
-}
-@Entity()
-export class RelatedUser extends RelatedEntity {
-  constructor(input?: DeepPartial<Post>) {
-    super(input);
-  }
-
-  @JoinColumn()
-  @ManyToOne(() => Post, (post) => post.relatedPosts)
-  post!: Post;
 }

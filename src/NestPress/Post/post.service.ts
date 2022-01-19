@@ -15,7 +15,7 @@ export class PostService {
     this.queryCollection = createAdvancedQuery({
       connection,
       entity: Post,
-      relations: ["relatedPosts", "relatedUsers", "postTaxonomies"],
+      relations: ["relatedPosts", "postTaxonomies"],
       fullTextSearch: {},
       customFilterPropertyMap: {
         postTaxonomiesId: "postTaxonomies.id",

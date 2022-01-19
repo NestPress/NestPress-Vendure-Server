@@ -12,10 +12,28 @@ import path from "path";
 import { NestPress } from "./NestPress";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
 
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+
+const webAppUrl = process.env.WEB_APP_URL || "http://localhost:3000";
+
+const emailFromAddress = (process.env.EMAIL_FROM_ADDRESS =
+  '"example" <noreply@example.com>');
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
+const transport = isDevelopment ? undefined : {
+  type: process.env.EMAIL_TYPE,
+  host: process.env.MAILGUN_SMTP_SERVER,
+  port: process.env.MAILGUN_SMTP_PORT,
+  auth: {
+    user: process.env.MAILGUN_SMTP_LOGIN,
+    pass: process.env.MAILGUN_SMTP_PASSWORD
+  }
+};
 
 export const config: VendureConfig = {
   apiOptions: {
-    port: 3000,
+    port,
     adminApiPath: "admin-api",
     adminApiPlayground: {
       settings: {
@@ -38,7 +56,7 @@ export const config: VendureConfig = {
     },
     tokenMethod: "cookie",
   },
-  dbConnectionOptions: {
+  dbConnectionOptions: isDevelopment ? {
     type: "postgres",
     synchronize: true, // turn this off for production
     logging: false,
@@ -48,6 +66,14 @@ export const config: VendureConfig = {
     username: "postgres",
     password: "postgres",
     migrations: [path.join(__dirname, "../migrations/*.ts")],
+  } : {
+    type: 'postgres',
+    synchronize: true,
+    url: process.env.DATABASE_URL,
+    migrations: [path.join(__dirname, "../migrations/*.ts")],
+    ssl: {
+      rejectUnauthorized: false
+    }
   },
   paymentOptions: {
     paymentMethodHandlers: [dummyPaymentHandler],
@@ -60,24 +86,24 @@ export const config: VendureConfig = {
       assetUploadDir: path.join(__dirname, "../static/assets"),
     }),
     AdminUiPlugin.init({
-      port: 3000,
-      route: '/admin'
+      port,
+      route: "/admin",
     }),
     DefaultJobQueuePlugin,
     DefaultSearchPlugin,
     EmailPlugin.init({
-      devMode: true,
+      devMode: isDevelopment as true,
+      transport: transport as any,
       outputPath: path.join(__dirname, "../static/email/test-emails"),
       route: "mailbox",
       handlers: defaultEmailHandlers,
       templatePath: path.join(__dirname, "../static/email/templates"),
       globalTemplateVars: {
         // The following variables will change depending on your storefront implementation
-        fromAddress: '"example" <noreply@example.com>',
-        verifyEmailAddressUrl: "http://localhost:3000/verify",
-        passwordResetUrl: "http://localhost:3000/password-reset",
-        changeEmailAddressUrl:
-          "http://localhost:3000/verify-email-address-change",
+        fromAddress: emailFromAddress,
+        verifyEmailAddressUrl: `${webAppUrl}/verify`,
+        passwordResetUrl: `${webAppUrl}/password-reset`,
+        changeEmailAddressUrl: `${webAppUrl}/verify-email-address-change`,
       },
     }),
   ],

@@ -1,10 +1,8 @@
 import { Customer, PluginCommonModule, VendurePlugin } from "@vendure/core";
 import { NestModule, MiddlewareConsumer } from "@nestjs/common";
-import { schemaExtension } from "./schema";
+import { schemaExtension, schemaShopOnlyExtension } from "./schema";
 import { CUSTOM_PERMISSION_ARR } from "./Permission/customPermission";
-import {
-  Post,
-} from "./Post/post.entity";
+import { Post } from "./Post/post.entity";
 import { PostService } from "./Post/post.service";
 import { PostResolver } from "./Post/post.resolver";
 import { Block } from "./Block/entity";
@@ -18,6 +16,8 @@ import { PostTaxonomyValue } from "./Post/taxonomy-value.entity";
 import { RelatedPostResolver } from "./Post/related-post.resolver";
 import { RelatedPost } from "./Post/related-post.entity";
 import { RelatedPostService } from "./Post/related-post.service";
+import { AssetShopResolver } from "./Assets/resolver.shop";
+
 @VendurePlugin({
   imports: [PluginCommonModule],
   entities: [
@@ -25,33 +25,34 @@ import { RelatedPostService } from "./Post/related-post.service";
     Post,
     RelatedPost,
     PostTaxonomyValue,
-    Block
+    Block,
   ],
   providers: [
     PostService,
     RelatedPostService,
     BlockService,
     TaxonomyValueService,
-    NestPressCustomerService
+    NestPressCustomerService,
     // ProfileService,
     // AddressService,
   ],
   shopApiExtensions: {
-    schema: schemaExtension,
+    schema: schemaShopOnlyExtension,
     resolvers: [
       PostResolver,
       RelatedPostResolver,
       BlockResolver,
       TaxonomyValueResolver,
-      CustomerResolver
-    ]
+      CustomerResolver,
+      AssetShopResolver,
+    ],
   },
   adminApiExtensions: {
     schema: schemaExtension,
     resolvers: [
       PostResolver,
       RelatedPostResolver,
-      BlockResolver
+      BlockResolver,
       // AddressResolver,
     ],
   },
@@ -67,17 +68,17 @@ import { RelatedPostService } from "./Post/related-post.service";
       ],
       Customer: [
         {
-          name: 'posts',
-          type: 'relation',
+          name: "posts",
+          type: "relation",
           entity: Post,
           // may be omitted if the entity name matches the GraphQL type name,
           // which is true for all built-in entities.
-          graphQLType: 'Post',
+          graphQLType: "Post",
           // Whether to "eagerly" load the relation
           // See https://typeorm.io/#/eager-and-lazy-relations
           eager: false,
-        }
-      ]
+        },
+      ],
     };
 
     return config;

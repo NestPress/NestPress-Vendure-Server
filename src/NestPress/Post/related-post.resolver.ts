@@ -14,11 +14,11 @@ export type RelatedPostFilter = {
   parent: ListFiltersOperators<string>;
 };
 
-export type GetTaxonomyValuesArgs = GetListArgs<RelatedPostFilter>;
+export type GetRelatedPostsArgs = GetListArgs<RelatedPostFilter>;
 
 @Resolver("RelatedPosts")
 export class RelatedPostResolver {
-  constructor(private taxonomyValueService: RelatedPostService) {}
+  constructor(private relatedPostsService: RelatedPostService) {}
 
   @Mutation()
   @Transaction()
@@ -26,7 +26,7 @@ export class RelatedPostResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { input: CreateRelatedPostInput }
   ) {
-    return this.taxonomyValueService.createRelatedPost(ctx, args.input);
+    return this.relatedPostsService.createRelatedPost(ctx, args.input);
   }
 
   @Mutation()
@@ -35,7 +35,7 @@ export class RelatedPostResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { id: ID; input: UpdateRelatedPostInput }
   ) {
-    return this.taxonomyValueService.updateRelatedPost(
+    return this.relatedPostsService.updateRelatedPost(
       ctx,
       args.id,
       args.input
@@ -48,15 +48,15 @@ export class RelatedPostResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { id: ID }
   ) {
-    return this.taxonomyValueService.deleteRelatedPost(ctx, args.id);
+    return this.relatedPostsService.deleteRelatedPost(ctx, args.id);
   }
 
   @Query()
   async getRelatedPosts(
     @Ctx() ctx: RequestContext,
-    @Args() args: GetTaxonomyValuesArgs
+    @Args() args: GetRelatedPostsArgs
   ) {
-    return this.taxonomyValueService.getRelatedPosts(ctx, args);
+    return this.relatedPostsService.getRelatedPosts(ctx, args);
   }
 
   @Query()
@@ -64,7 +64,7 @@ export class RelatedPostResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { id: string }
   ) {
-    const post = await this.taxonomyValueService.getById(ctx, args.id);
+    const post = await this.relatedPostsService.getById(ctx, args.id);
 
     return {
       ...post,

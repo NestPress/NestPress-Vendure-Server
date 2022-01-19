@@ -78,12 +78,13 @@ export const extendPost = gql`
   }
 
   input RelatedPostInput {
-    postID: ID!
+    post: ID!
     relationType: String!
     customFields: JSON
   }
 
   type RelatedPost {
+    id: ID!
     post: Post!
     relationType: String!
     customFields: JSON
@@ -242,10 +243,10 @@ export const extendPost = gql`
   }
 
   input RelatedPostFilter {
-    key: StringOperators
-    value: StringOperators
-    parent: IDOperators
-    type: PostTaxonomyTypeOperators
+    id: IDOperators
+    postId: IDOperators
+    relationType: StringOperators
+    customFields: JSONOperators
   }
 
   extend type Query {

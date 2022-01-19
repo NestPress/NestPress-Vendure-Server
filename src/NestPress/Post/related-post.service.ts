@@ -15,6 +15,9 @@ export class RelatedPostService {
       entity: RelatedPost,
       relations: ['post'],
       fullTextSearch: {},
+      customFilterPropertyMap: {
+        postId: "post.id",
+      },
     });
   }
   getById(ctx: RequestContext, id: string) {
@@ -66,6 +69,12 @@ export class RelatedPostService {
 
     const post = repository.create(input as unknown as RelatedPost);
 
-    return await repository.save(post);
+    const createdPost = await repository.save(post);
+
+    const postEntity = await repository.findOneOrFail(createdPost.id, {
+      relations: ['post']
+    });
+
+    return postEntity;
   }
 }

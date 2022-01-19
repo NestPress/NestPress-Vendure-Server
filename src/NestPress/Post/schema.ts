@@ -201,6 +201,8 @@ export const extendPost = gql`
     postType: PostTypeOperators
     id: IDOperators
     postTaxonomiesId: IDOperators
+    postTaxonomiesKey: StringOperators
+    postTaxonomiesValue: StringOperators
     title: StringOperators
     customType: StringOperators
     customFields: JSONOperators
@@ -251,8 +253,13 @@ export const extendPost = gql`
     changePostSlug(id: ID!, slug: String!): Post
     deletePost(id: ID!): ID
 
-    createPostTaxonomyValue(input: CreatePostTaxonomyValueInput): PostTaxonomyValue
-    updatePostTaxonomyValue(id: ID!, input: UpdatePostTaxonomyValueInput): PostTaxonomyValue
+    createPostTaxonomyValue(
+      input: CreatePostTaxonomyValueInput
+    ): PostTaxonomyValue
+    updatePostTaxonomyValue(
+      id: ID!
+      input: UpdatePostTaxonomyValueInput
+    ): PostTaxonomyValue
     deletePostTaxonomyValue(id: ID!): ID
   }
 `;

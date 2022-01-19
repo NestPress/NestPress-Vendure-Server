@@ -19,6 +19,8 @@ export class PostService {
       fullTextSearch: {},
       customFilterPropertyMap: {
         postTaxonomiesId: "postTaxonomies.id",
+        postTaxonomiesKey: "postTaxonomies.key",
+        postTaxonomiesValue: "postTaxonomies.value",
       },
     });
   }

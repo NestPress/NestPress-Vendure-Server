@@ -1,5 +1,5 @@
 import { VendureEntity } from "@vendure/core";
-import { Entity, DeepPartial, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, ManyToMany } from "typeorm";
+import { Entity, DeepPartial, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, ManyToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Post } from "./post.entity";
 
 export type PostTaxonomyType = 'Tag' | 'Category';
@@ -11,6 +11,12 @@ export class PostTaxonomyValue extends VendureEntity {
   }
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 
   @Column()
   key!: string;

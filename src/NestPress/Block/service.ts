@@ -77,8 +77,7 @@ export class BlockService {
   async deleteBlocks(ctx: RequestContext, input: { blocks: string[]; }) {
     let result = [];
 
-    for (let i = 0; i < input.blocks.length; i++)
-    {
+    for (let i = 0; i < input.blocks.length; i++) {
       result.push(await this.deleteBlock(ctx, input.blocks[i]));
     }
 
@@ -99,8 +98,7 @@ export class BlockService {
   async updateBlocks(ctx: RequestContext, input: BlocksInput) {
     let result = [];
 
-    for (let i = 0; i < input.blocks.length; i++)
-    {
+    for (let i = 0; i < input.blocks.length; i++) {
       result.push(await this.updateBlock(ctx, input.blocks[i].id!, input.blocks[i]));
     }
 
@@ -118,8 +116,7 @@ export class BlockService {
   async createBlocks(ctx: RequestContext, input: BlocksInput) {
     let result = [];
 
-    for (let i = 0; i < input.blocks.length; i++)
-    {
+    for (let i = 0; i < input.blocks.length; i++) {
       result.push(await this.createBlock(ctx, input.blocks[i]));
     }
 

@@ -1,21 +1,36 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
-import { ID, RequestContext, TransactionalConnection } from "@vendure/core";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
+import {
+  ID,
+  RequestContext,
+  TransactionalConnection,
+  UnauthorizedError,
+  UserService,
+} from "@vendure/core";
 import { GetPostsArgs, PostInput, PostsFilter } from "./post.resolver";
 import { Post } from "./post.entity";
 import { createAdvancedQuery, AdvancedQueryResult } from "../advancedQuery";
 import * as uuid from "uuid";
 import { PostTaxonomyValue } from "./taxonomy-value.entity";
 import { slugify } from "../slugify";
+import { PostPermissionService } from "../PostPermission/post-permission.service";
 
 @Injectable()
 export class PostService {
   private queryCollection: AdvancedQueryResult<Post, any>;
 
-  constructor(private connection: TransactionalConnection) {
+  constructor(
+    private connection: TransactionalConnection,
+    private userService: UserService,
+    private postPermissionService: PostPermissionService
+  ) {
     this.queryCollection = createAdvancedQuery({
       connection,
       entity: Post,
-      relations: ["relatedPosts", "postTaxonomies"],
+      relations: ["leftRelatedPosts", "rightRelatedPosts", "postTaxonomies"],
       fullTextSearch: {},
       customFilterPropertyMap: {
         postTaxonomiesId: "postTaxonomies.id",
@@ -24,7 +39,9 @@ export class PostService {
       },
     });
   }
-  getById(ctx: RequestContext, id: string) {
+  async getById(ctx: RequestContext, id: string) {
+    const user = await this.getActiveUser(ctx);
+
     const qb = this.queryCollection(ctx, {
       filter: {
         id: {
@@ -33,7 +50,15 @@ export class PostService {
       },
     });
 
-    return qb.getQuery().getOne();
+    const post = await qb.getQuery().getOne();
+
+    if (!post) {
+      throw new NotFoundException();
+    }
+
+    await this.postPermissionService.validatePostOrFail(post, user, "read");
+
+    return post;
   }
   getBySlug(ctx: RequestContext, slug: string) {
     const qb = this.queryCollection(ctx, {
@@ -46,19 +71,62 @@ export class PostService {
 
     return qb.getQuery().getOne();
   }
-  getPosts(ctx: RequestContext, args: GetPostsArgs = {}) {
-    const qb = this.queryCollection(ctx, args);
+  async getPosts(ctx: RequestContext, args: GetPostsArgs = {}) {
+    const user = await this.getActiveUserOrFail(ctx);
+
+    const userCustomTypes =
+      await this.postPermissionService.getUserCustomTypePermission(user);
+
+    if (args.filter && !args.filter.customType) {
+      args.filter.customType = {
+        in: userCustomTypes,
+      };
+    } else if (
+      args.filter &&
+      args.filter.customType &&
+      !args.filter.customType.in
+    ) {
+      args.filter.customType.in = userCustomTypes;
+    } else if (
+      args.filter &&
+      args.filter.customType &&
+      args.filter.customType.in
+    ) {
+      args.filter.customType.in =
+        args.filter.customType.in.concat(userCustomTypes);
+    }
+
+    const qb = this.queryCollection(ctx, {
+      ...args,
+    });
 
     return qb.getListWithCount(qb.getQuery());
   }
+
+  private async getActiveUserOrFail(ctx: RequestContext) {
+    const user = await this.userService.getUserById(ctx, ctx.activeUserId!);
+
+    if (!user) {
+      throw new UnauthorizedError();
+    }
+    return user;
+  }
+
+  private async getActiveUser(ctx: RequestContext) {
+    return await this.userService.getUserById(ctx, ctx.activeUserId!);
+  }
+
   async changePostStatus(ctx: RequestContext, id: ID, status: string) {
     const repository = this.connection.getRepository(ctx, Post);
+
+    const user = await this.getActiveUserOrFail(ctx);
+    const post = await repository.findOneOrFail(id);
+
+    await this.postPermissionService.validatePostOrFail(post, user, "update");
 
     await repository.update(id, {
       status: status as any,
     });
-
-    const post = await repository.findOneOrFail(id);
 
     return post;
   }
@@ -66,7 +134,10 @@ export class PostService {
   async deletePost(ctx: RequestContext, id: ID) {
     const repository = this.connection.getRepository(ctx, Post);
 
+    const user = await this.getActiveUserOrFail(ctx);
     const post = await repository.findOneOrFail(id);
+
+    await this.postPermissionService.validatePostOrFail(post, user, "delete");
 
     post.slug = `${post.slug}-${uuid.v4()}`;
     await repository.save(post);
@@ -78,9 +149,10 @@ export class PostService {
   async updatePost(ctx: RequestContext, id: ID, input: PostInput) {
     const repository = this.connection.getRepository(ctx, Post);
 
-    await repository.findOneOrFail(id);
-
+    const user = await this.getActiveUserOrFail(ctx);
     const post = await repository.findOneOrFail(id);
+
+    await this.postPermissionService.validatePostOrFail(post, user, "update");
 
     const updatingPost = Object.assign(post, input);
 
@@ -91,10 +163,19 @@ export class PostService {
   async createPost(ctx: RequestContext, input: PostInput) {
     const repository = this.connection.getRepository(ctx, Post);
 
+    const user = await this.userService.getUserById(ctx, ctx.activeUserId!);
+
+    if (!user) {
+      throw new UnauthorizedError();
+    }
+
     const post = repository.create({
       ...input,
+      author: user,
       // asset,
     });
+
+    await this.postPermissionService.validatePostOrFail(post, user, "create");
 
     if (!input.slug) {
       post.slug = await this.generateSlug(ctx, input.title);

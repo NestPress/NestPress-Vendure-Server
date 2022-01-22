@@ -3,6 +3,7 @@ import { extendAssets, shopOnlyAssets } from "./Assets/schema";
 import { extendBlock } from "./Block/schema";
 import { extendCustomer } from "./Customer/schema";
 import { extendPost } from "./Post/schema";
+import { postPermissionSchema } from "./PostPermission/schema";
 
 export const schemaExtension = gql`
   ${extendAssets}
@@ -14,4 +15,9 @@ export const schemaExtension = gql`
 export const schemaShopOnlyExtension = gql`
   ${schemaExtension}
   ${shopOnlyAssets}
+`;
+
+export const schemaAdminOnlyExtension = gql`
+  ${schemaExtension}
+  ${postPermissionSchema}
 `;

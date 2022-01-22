@@ -1,4 +1,4 @@
-import { VendureEntity, ID, Asset, Customer, DeepPartial } from "@vendure/core";
+import { VendureEntity, ID, Asset, Customer, DeepPartial, User } from "@vendure/core";
 import {
   Column,
   Entity,
@@ -39,6 +39,7 @@ export class Post extends VendureEntity {
   }
   @PrimaryGeneratedColumn()
   id!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 
@@ -99,11 +100,13 @@ export class Post extends VendureEntity {
   })
   customFields?: any | null;
 
-  @OneToMany(() => RelatedPost, (relatedPost) => relatedPost.post, {
-    cascade: true,
-  })
+  @OneToMany(() => RelatedPost, (relatedPost) => relatedPost.leftPost)
   @JoinColumn()
-  relatedPosts!: RelatedPost[];
+  leftRelatedPosts!: RelatedPost[];
+
+  @OneToMany(() => RelatedPost, (relatedPost) => relatedPost.leftPost)
+  @JoinColumn()
+  rightRelatedPosts!: RelatedPost[];
 
   @ManyToMany(
     () => PostTaxonomyValue,
@@ -111,4 +114,10 @@ export class Post extends VendureEntity {
   )
   @JoinTable()
   postTaxonomies!: PostTaxonomyValue[];
+
+  @ManyToOne(
+    () => User
+  )
+  @JoinColumn()
+  author!: User;
 }

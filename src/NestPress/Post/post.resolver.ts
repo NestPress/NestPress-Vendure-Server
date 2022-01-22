@@ -23,6 +23,7 @@ export type PostsFilter = {
   id: ListFiltersOperators<number>;
   category: ListFiltersOperators<PostTaxonomyValue>
   tags: ListFiltersOperators<PostTaxonomyValue>
+  customType: ListFiltersOperators<string | null>
 }
 
 export type GetPostsArgs = GetListArgs<PostsFilter>;

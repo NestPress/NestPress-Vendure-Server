@@ -13,10 +13,11 @@ export class RelatedPostService {
     this.queryCollection = createAdvancedQuery({
       connection,
       entity: RelatedPost,
-      relations: ['post'],
+      relations: ['leftPost', 'rightPost'],
       fullTextSearch: {},
       customFilterPropertyMap: {
-        postId: "post.id",
+        leftPost: "leftPost.id",
+        rightPost: "rightPost.id",
       },
     });
   }
@@ -72,7 +73,7 @@ export class RelatedPostService {
     const createdPost = await repository.save(post);
 
     const postEntity = await repository.findOneOrFail(createdPost.id, {
-      relations: ['post']
+      relations: ['leftPost', 'rightPost']
     });
 
     return postEntity;

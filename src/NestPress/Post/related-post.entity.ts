@@ -15,8 +15,10 @@ export class RelatedEntity extends VendureEntity {
   }
   @PrimaryGeneratedColumn()
   id!: number;
+
   @Column()
   relationType!: string;
+
   @Column({
     type: "simple-json",
   })
@@ -29,7 +31,11 @@ export class RelatedPost extends RelatedEntity {
     super(input);
   }
 
-  @ManyToOne(() => Post, (post) => post.relatedPosts)
+  @ManyToOne(() => Post, (post) => post.leftRelatedPosts)
   @JoinColumn()
-  post!: Post;
+  leftPost!: Post;
+
+  @ManyToOne(() => Post, (post) => post.rightRelatedPosts)
+  @JoinColumn()
+  rightPost!: Post;
 }

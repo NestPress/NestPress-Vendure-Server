@@ -227,14 +227,16 @@ export const extendPost = gql`
   }
 
   input CreateRelatedPostInput {
-    post: ID!
+    leftPost: ID!
+    rightPost: ID!
     relationType: String!
     customFields: JSON
   }
 
   input UpdateRelatedPostInput {
     id: ID!
-    post: ID!
+    leftPost: ID!
+    rightPost: ID!
     relationType: String!
     customFields: JSON
   }

@@ -5,13 +5,11 @@ import { Ctx, ID, RequestContext, Transaction } from "@vendure/core";
 import { GetListArgs, ListFiltersOperators } from "../common";
 import { CreateRelatedPostInput, UpdateRelatedPostInput } from "./related-post.inputs";
 import { RelatedPostService } from "./related-post.service";
-import { PostTaxonomyType } from "./taxonomy-value.entity";
 
 export type RelatedPostFilter = {
-  key: ListFiltersOperators<string>;
-  value: ListFiltersOperators<string>;
-  type: ListFiltersOperators<PostTaxonomyType>;
-  parent: ListFiltersOperators<string>;
+  leftPost: ListFiltersOperators<ID>;
+  rightPost: ListFiltersOperators<ID>;
+  relationType: ListFiltersOperators<string>;
 };
 
 export type GetRelatedPostsArgs = GetListArgs<RelatedPostFilter>;

@@ -49,7 +49,8 @@ export const extendPost = gql`
     title: String!
     slug: String!
     content: String
-    relatedPosts: [RelatedPost]
+    leftRelatedPosts: [RelatedPost]
+    rightRelatedPosts: [RelatedPost]
     relatedUsers: [RelatedUser]
     blocks: [Block]
     # contentBlocks
@@ -71,21 +72,24 @@ export const extendPost = gql`
     title: String!
     slug: String!
     content: String
-    relatedPosts: [RelatedPost]
+    leftRelatedPosts: [RelatedPost]
+    rightRelatedPosts: [RelatedPost]
     relatedUsers: [RelatedUser]
     # contentBlocks
     postTaxonomies: [PostTaxonomyValue]
   }
 
   input RelatedPostInput {
-    post: ID!
+    leftPost: ID!
+    rightPost: ID!
     relationType: String!
     customFields: JSON
   }
 
   type RelatedPost {
     id: ID!
-    post: Post!
+    leftPost: Post!
+    rightPost: Post!
     relationType: String!
     customFields: JSON
   }
@@ -112,7 +116,8 @@ export const extendPost = gql`
     content: String
     slug: String
     # assets: Assets
-    relatedPosts: [RelatedPostInput]
+    leftRelatedPost: [RelatedPostInput]
+    rightRelatedPost: [RelatedPostInput]
     relatedUsers: [RelatedUserInput]
     postTaxonomies: [ID]
   }
@@ -127,7 +132,8 @@ export const extendPost = gql`
     customType: String
     customFields: JSON
     # assets: Assets
-    relatedPosts: [RelatedPostInput]
+    leftRelatedPost: [RelatedPostInput]
+    rightRelatedPost: [RelatedPostInput]
     relatedUsers: [RelatedUserInput]
     postTaxonomies: [ID]
   }
@@ -248,7 +254,8 @@ export const extendPost = gql`
 
   input RelatedPostFilter {
     id: IDOperators
-    postId: IDOperators
+    leftRelatedPost: IDOperators
+    rightRelatedPost: IDOperators
     relationType: StringOperators
     customFields: JSONOperators
   }

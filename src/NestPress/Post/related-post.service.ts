@@ -4,6 +4,7 @@ import { GetTaxonomyValuesArgs } from "./taxonomy-value.resolver";
 import { createAdvancedQuery, AdvancedQueryResult } from "../advancedQuery";
 import { RelatedPost } from "./related-post.entity";
 import { CreateRelatedPostInput, UpdateRelatedPostInput } from "./related-post.inputs";
+import { GetRelatedPostsArgs } from "./related-post.resolver";
 
 @Injectable()
 export class RelatedPostService {
@@ -32,7 +33,7 @@ export class RelatedPostService {
 
     return qb.getQuery().getOne();
   }
-  getRelatedPosts(ctx: RequestContext, args: GetTaxonomyValuesArgs = {}) {
+  getRelatedPosts(ctx: RequestContext, args: GetRelatedPostsArgs = {}) {
     const qb = this.queryCollection(ctx, args);
 
     return qb.getListWithCount(qb.getQuery());

@@ -4,7 +4,7 @@ export interface GetListArgs<T> {
     query?: string
     limit? :number
     offset?: number
-    filter?: T
+    filter?: Partial<T>
     sort?: Record<string, SortOrder>
 }
 

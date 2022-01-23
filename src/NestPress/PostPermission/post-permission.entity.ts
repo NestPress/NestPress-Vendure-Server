@@ -14,9 +14,7 @@ export class PostPermission extends VendureEntity {
   @Column('varchar')
   operation!: PostOperation;
 
-  @ManyToOne(() => Role, {
-    eager: true
-  })
+  @ManyToOne(() => Role)
   @JoinColumn()
   role!: Role;
 

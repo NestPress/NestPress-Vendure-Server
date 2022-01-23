@@ -75,30 +75,37 @@ export class PostService {
     const user = await this.getActiveUserOrFail(ctx);
 
     const userCustomTypes =
-      await this.postPermissionService.getUserCustomTypePermission(user);
+      await this.postPermissionService.getUserCustomTypeDenyPermission(user);
 
-    if (args.filter && !args.filter.customType) {
-      if (userCustomTypes.length !== 0) {
+    if (!args.filter) {
+      args.filter = {
+        customType: {
+          notIn: userCustomTypes
+        }
+      } as any
+    }
+    else if (args.filter && !args.filter.customType) {
+      if (userCustomTypes.length >0) {
         args.filter.customType = {
-          in: userCustomTypes,
+          notIn: userCustomTypes,
         };
       }
     } else if (
       args.filter &&
       args.filter.customType &&
-      !args.filter.customType.in
+      !args.filter.customType.notIn
     ) {
-      if (userCustomTypes.length !== 0) {
-        args.filter.customType.in = userCustomTypes;
+      if (userCustomTypes.length > 0) {
+        args.filter.customType.notIn = userCustomTypes;
       }
     } else if (
       args.filter &&
       args.filter.customType &&
-      args.filter.customType.in
+      args.filter.customType.notIn
     ) {
-      if (userCustomTypes.length !== 0) {
-        args.filter.customType.in =
-          args.filter.customType.in.concat(userCustomTypes);
+      if (userCustomTypes.length > 0) {
+        args.filter.customType.notIn =
+          args.filter.customType.notIn.concat(userCustomTypes);
       }
     }
 

@@ -19,11 +19,11 @@ export type PostInput = {
 }
 
 export type PostsFilter = {
-  postType: ListFiltersOperators<Post>;
-  id: ListFiltersOperators<number>;
-  category: ListFiltersOperators<PostTaxonomyValue>
-  tags: ListFiltersOperators<PostTaxonomyValue>
-  customType: ListFiltersOperators<string | null>
+  postType?: ListFiltersOperators<Post>;
+  id?: ListFiltersOperators<number>;
+  category?: ListFiltersOperators<PostTaxonomyValue>
+  tags?: ListFiltersOperators<PostTaxonomyValue>
+  customType?: ListFiltersOperators<string | null>
 }
 
 export type GetPostsArgs = GetListArgs<PostsFilter>;

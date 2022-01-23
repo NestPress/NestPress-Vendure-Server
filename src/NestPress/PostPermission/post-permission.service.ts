@@ -1,6 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { ForbiddenError, ID, RequestContext, TransactionalConnection, User } from "@vendure/core";
-import { In, Repository } from "typeorm";
+import {
+  ForbiddenError,
+  ID,
+  RequestContext,
+  TransactionalConnection,
+  User,
+} from "@vendure/core";
+import { Any, In, Raw, Repository } from "typeorm";
 import { AdvancedQueryResult, createAdvancedQuery } from "../advancedQuery";
 import { Post } from "../Post/post.entity";
 import {
@@ -8,18 +14,19 @@ import {
   PostPermission,
   PostPermissionScope,
 } from "./post-permission.entity";
-import { CreatePostPermissionInput, UpdatePostPermissionInput } from "./post-permission.inputs";
+import {
+  CreatePostPermissionInput,
+  UpdatePostPermissionInput,
+} from "./post-permission.inputs";
 import { GetPostPermissionArgs } from "./post-permission.resolver";
 
 @Injectable()
 export class PostPermissionService {
-  constructor(
-    private connection: TransactionalConnection
-  ) {
+  constructor(private connection: TransactionalConnection) {
     this.queryCollection = createAdvancedQuery({
       connection,
       entity: PostPermission,
-      relations: ['role'],
+      relations: ["role"],
       fullTextSearch: {},
     });
   }
@@ -63,7 +70,9 @@ export class PostPermissionService {
       ...(input as unknown as PostPermission),
     });
 
-    const post = await repository.findOneOrFail(id);
+    const post = await repository.findOneOrFail(id, {
+      relations: ["role"],
+    });
 
     return post;
   }
@@ -77,24 +86,23 @@ export class PostPermissionService {
 
     const createdPost = await repository.save(post);
 
-    return repository.findOneOrFail(createdPost.id);
+    return repository.findOneOrFail(createdPost.id, {
+      relations: ["role"],
+    });
   }
 
-  async getUserCustomTypePermission(user: User) {
+  async getUserCustomTypeDenyPermission(user: User) {
     const postPermissionRepo = this.connection.getRepository(PostPermission);
 
-    const postPermissions = await postPermissionRepo.find({
-      where: {
-        role: In(user.roles),
-        operation: "list",
-      },
-    });
+    const postPermissions = await postPermissionRepo
+      .createQueryBuilder("postPermission")
+      .innerJoinAndSelect("postPermission.role", "role")
+      .where("role.id IN(:...id)", { id: user.roles.map((role) => role.id) })
+      .andWhere("postPermission.operation = 'list'")
+      .andWhere("postPermission.shouldAllow = false")
+      .getMany();
 
-    return postPermissions
-      .map((postPermission) => {
-        return postPermission.shouldAllow ? postPermission.customType : null;
-      })
-      .filter((value) => !!value);
+    return postPermissions.map((postPermission) => postPermission.customType);
   }
 
   async validateList(
@@ -103,13 +111,16 @@ export class PostPermissionService {
   ): Promise<PostPermissionScope | null> {
     const postPermissionRepo = this.connection.getRepository(PostPermission);
 
-    const postPermissions = await postPermissionRepo.find({
-      where: {
-        customType: customType,
-        role: In(user.roles),
-        operation: "list",
-      },
-    });
+    const postPermissions = await postPermissionRepo
+      .createQueryBuilder("postPermission")
+      .innerJoinAndSelect("postPermission.role", "role")
+      .where("role.id IN(:...id)", { id: user.roles.map((role) => role.id) })
+      .andWhere("postPermission.operation = 'list'")
+      .andWhere("postPermission.shouldAllow = false")
+      .andWhere("postPermission.customType = :customType", {
+        customType,
+      })
+      .getMany();
 
     let result: PostPermissionScope | null = null;
     for (let i = 0; i < postPermissions.length; i++) {
@@ -129,7 +140,7 @@ export class PostPermissionService {
     user: User | undefined,
     operation: PostOperation
   ) {
-    if (!this.validatePermission(post, user, operation)) {
+    if (!(await this.validatePermission(post, user, operation))) {
       throw new ForbiddenError();
     }
   }
@@ -139,28 +150,43 @@ export class PostPermissionService {
     user: User | undefined,
     operation: PostOperation
   ) {
+    const scope =
+      operation !== "create"
+        ? post.author === user
+          ? "author"
+          : "all"
+        : "all";
+
+    if (!user) {
+      return false;
+    }
+
     const postPermissionRepo = this.connection.getRepository(PostPermission);
 
-    const scope = operation !== "create" ? (post.author === user ? "author" : "all") : "all";
-
-    const postPermissions = await postPermissionRepo.find({
-      where: {
-        customType: post.customType,
-        role: user ? In(user.roles) : null,
+    const postPermissions = await postPermissionRepo
+      .createQueryBuilder("postPermission")
+      .innerJoinAndSelect("postPermission.role", "role")
+      .where("role.id IN(:...id)", { id: user.roles.map((role) => role.id) })
+      .andWhere("postPermission.operation = :operation", {
         operation,
+      })
+      .andWhere("postPermission.scope = :scope", {
         scope,
-      },
-    });
+      })
+      .andWhere("postPermission.customType = :customType", {
+        customType: post.customType
+      })
+      .getMany();
 
     if (postPermissions.length === 0) {
-      return false;
+      return true;
     }
 
     const result = postPermissions
       .map((postPermission: PostPermission) => {
         return postPermission.shouldAllow;
       })
-      .filter((value) => !value);
+      .filter((value) => !Boolean(value));
 
     return result.length === 0;
   }

@@ -38,8 +38,6 @@ export class PostPermissionsComponent {
     `);
 
     roles$.single$.subscribe((data: any) => {
-      console.log(data);
-
       this.roles = data.roles.items;
     });
 
@@ -96,8 +94,6 @@ export class PostPermissionsComponent {
       ...values,
       shouldAllow: values.shouldAllow === "true" ? true : false,
     };
-
-    console.log(variables);
 
     const response$ = this.dataService.mutate(
       gql`

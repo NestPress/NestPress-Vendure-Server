@@ -78,22 +78,28 @@ export class PostService {
       await this.postPermissionService.getUserCustomTypePermission(user);
 
     if (args.filter && !args.filter.customType) {
-      args.filter.customType = {
-        in: userCustomTypes,
-      };
+      if (userCustomTypes.length !== 0) {
+        args.filter.customType = {
+          in: userCustomTypes,
+        };
+      }
     } else if (
       args.filter &&
       args.filter.customType &&
       !args.filter.customType.in
     ) {
-      args.filter.customType.in = userCustomTypes;
+      if (userCustomTypes.length !== 0) {
+        args.filter.customType.in = userCustomTypes;
+      }
     } else if (
       args.filter &&
       args.filter.customType &&
       args.filter.customType.in
     ) {
-      args.filter.customType.in =
-        args.filter.customType.in.concat(userCustomTypes);
+      if (userCustomTypes.length !== 0) {
+        args.filter.customType.in =
+          args.filter.customType.in.concat(userCustomTypes);
+      }
     }
 
     const qb = this.queryCollection(ctx, {

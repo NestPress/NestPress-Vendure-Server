@@ -59,7 +59,7 @@ export const config: VendureConfig = {
   dbConnectionOptions: isDevelopment ? {
     type: "postgres",
     synchronize: true, // turn this off for production
-    logging: false,
+    logging: true,
     database: "postgres",
     host: "localhost",
     port: 5432,

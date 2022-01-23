@@ -19,7 +19,7 @@ export class PostPermissionService {
     this.queryCollection = createAdvancedQuery({
       connection,
       entity: PostPermission,
-      relations: [],
+      relations: ['role'],
       fullTextSearch: {},
     });
   }
@@ -75,7 +75,9 @@ export class PostPermissionService {
 
     const post = repository.create(input as unknown as PostPermission);
 
-    return await repository.save(post);
+    const createdPost = await repository.save(post);
+
+    return repository.findOneOrFail(createdPost.id);
   }
 
   async getUserCustomTypePermission(user: User) {
@@ -139,7 +141,7 @@ export class PostPermissionService {
   ) {
     const postPermissionRepo = this.connection.getRepository(PostPermission);
 
-    const scope = operation !== "create" ? post.author === user : "all";
+    const scope = operation !== "create" ? (post.author === user ? "author" : "all") : "all";
 
     const postPermissions = await postPermissionRepo.find({
       where: {

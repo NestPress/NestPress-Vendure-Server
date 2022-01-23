@@ -16,7 +16,7 @@ export type GetPostPermissionArgs = GetListArgs<PostPermissionsFilter>;
 
 @Resolver("PostPermission")
 export class PostPermissionResolver {
-  constructor(private taxonomyValueService: PostPermissionService) {}
+  constructor(private postPermissionService: PostPermissionService) {}
 
   @Mutation()
   @Transaction()
@@ -24,7 +24,7 @@ export class PostPermissionResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { input: CreatePostPermissionInput }
   ) {
-    return this.taxonomyValueService.createPostPermission(ctx, args.input);
+    return this.postPermissionService.createPostPermission(ctx, args.input);
   }
 
   @Mutation()
@@ -33,7 +33,7 @@ export class PostPermissionResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { id: ID; input: UpdatePostPermissionInput }
   ) {
-    return this.taxonomyValueService.updatePostPermission(
+    return this.postPermissionService.updatePostPermission(
       ctx,
       args.id,
       args.input
@@ -46,7 +46,7 @@ export class PostPermissionResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { id: ID }
   ) {
-    return this.taxonomyValueService.deletePostPermission(ctx, args.id);
+    return this.postPermissionService.deletePostPermission(ctx, args.id);
   }
 
   @Query()
@@ -54,7 +54,7 @@ export class PostPermissionResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: GetPostPermissionArgs
   ) {
-    return this.taxonomyValueService.getPostPermissions(ctx, args);
+    return this.postPermissionService.getPostPermissions(ctx, args);
   }
 
   @Query()
@@ -62,7 +62,7 @@ export class PostPermissionResolver {
     @Ctx() ctx: RequestContext,
     @Args() args: { id: string }
   ) {
-    const post = await this.taxonomyValueService.getById(ctx, args.id);
+    const post = await this.postPermissionService.getById(ctx, args.id);
 
     return {
       ...post,

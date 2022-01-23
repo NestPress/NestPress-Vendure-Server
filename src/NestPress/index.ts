@@ -97,16 +97,22 @@ import { PostPermissionResolver } from "./PostPermission/post-permission.resolve
         route: '/admin',
         app: compileUiExtensions({
           outputPath: path.join(__dirname, "admin-ui", "src"),
+          devMode: true,
           extensions: [
             {
               extensionPath: path.join(__dirname, "ui-extensions"),
               ngModules: [
                 {
                   type: "lazy",
-                  route: "greet",
-                  ngModuleFileName: "post-permission.module.ts",
+                  route: "post-permissions",
+                  ngModuleFileName: "post-permissions.module.ts",
                   ngModuleName: "PostPermissionModule",
                 },
+                {
+                  type: 'shared',
+                  ngModuleFileName: 'nest-press-admin-shared.module.ts',
+                  ngModuleName: 'NestPressAdminSharedModule',
+                }
               ],
             },
           ],

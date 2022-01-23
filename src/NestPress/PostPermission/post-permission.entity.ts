@@ -3,7 +3,7 @@ import { Column, DeepPartial, Entity, Index, JoinColumn, ManyToOne, PrimaryGener
 
 export type PostOperation = "create" | "update" | "delete" | "read" | "list";
 
-export type PostPermissionScope = "author" | "all";
+export type PostPermissionScope = "author" | "all" | "contributor";
 
 @Entity()
 @Index(['customType', 'role', 'operation', 'scope'])
@@ -11,17 +11,19 @@ export class PostPermission extends VendureEntity {
   @PrimaryGeneratedColumn()
   id!: ID;
 
-  @Column()
+  @Column('varchar')
   operation!: PostOperation;
 
-  @ManyToOne(() => Role)
+  @ManyToOne(() => Role, {
+    eager: true
+  })
   @JoinColumn()
   role!: Role;
 
   @Column()
   shouldAllow!: boolean;
 
-  @Column()
+  @Column('varchar')
   scope!: PostPermissionScope;
 
   @Column()

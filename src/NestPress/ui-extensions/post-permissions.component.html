@@ -1,0 +1,118 @@
+<h1>Post permissions</h1>
+<h2>By default all not defined permissions deny access to a resource</h2>
+
+<form
+  *ngIf="postPermissions != undefined"
+  id="createPostPermissionForm"
+  [formGroup]="createPostPermissionForm"
+  (ngSubmit)="onCreateEntrySubmit()"
+>
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="left">Role</th>
+        <th class="left">Custom type</th>
+        <th class="left">Scope</th>
+        <th class="left">Operation</th>
+        <th class="left">Should allow?</th>
+        <th class="left">ID</th>
+        <th class="right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let postPermission of postPermissions.getPostPermissions.list">
+        <td class="left">{{ postPermission.role.code }}</td>
+        <td class="left">{{ postPermission.customType }}</td>
+        <td class="left">{{ postPermission.scope }}</td>
+        <td class="left">{{ postPermission.operation }}</td>
+        <td class="left">{{ postPermission.shouldAllow }}</td>
+        <td class="right">{{ postPermission.id }}</td>
+        <td class="right align-middle">
+          <vdr-dropdown>
+            <button
+              type="button" 
+              class="btn btn-link btn-sm"
+              vdrDropdownTrigger
+            >
+              {{ "common.actions" | translate }}
+              <clr-icon shape="caret down"></clr-icon>
+            </button>
+            <vdr-dropdown-menu vdrPosition="bottom-right">
+              <button
+                type="button"
+                class="delete-button"
+                (click)="deletePostPermission(postPermission.id)"
+                vdrDropdownItem
+              >
+                <clr-icon shape="trash" class="is-danger"></clr-icon>
+                {{ "common.delete" | translate }}
+              </button>
+            </vdr-dropdown-menu>
+          </vdr-dropdown>
+        </td>
+      </tr>
+      <tr>
+        <td class="left">
+          <label>
+            role<br />
+            <select formControlName="role">
+              <option [value]="role.id" *ngFor="let role of roles">{{ role.code }}</option>
+            </select>
+          </label>
+        </td>
+        <td class="left">
+          <label
+            >customType<br />
+            <input
+              type="text"
+              form="createPostPermissionForm"
+              formControlName="customType"
+            />
+          </label>
+        </td>
+        <td class="left">
+          <label>scope<br /></label>
+          <select form="createPostPermissionForm" formControlName="scope">
+            <option value="author">author</option>
+            <option value="all">all</option>
+          </select>
+        </td>
+        <td class="left">
+          <label
+            >operation<br />
+            <select form="createPostPermissionForm" formControlName="operation">
+              <option value="create">create</option>
+              <option value="update">update</option>
+              <option value="delete">delete</option>
+              <option value="read">read</option>
+              <option value="list">list</option>
+            </select>
+          </label>
+        </td>
+        <td class="left">
+          <label
+            >shouldAllow<br />
+            <select
+              form="createPostPermissionForm"
+              formControlName="shouldAllow"
+            >
+              <option [value]="true">true</option>
+              <option [value]="false">false</option>
+            </select>
+          </label>
+        </td>
+        <td className="left">&nbsp;</td>
+        <td>
+          <button
+            type="submit"
+            class="btn"
+            form="createPostPermissionForm"
+            [disabled]="!createPostPermissionForm.valid"
+          >
+            Create entry
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>

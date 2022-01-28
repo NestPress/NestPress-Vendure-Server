@@ -1,5 +1,5 @@
-import { Args, Mutation, Resolver } from "@nestjs/graphql";
-import { Ctx, Transaction, RequestContext, AssetService } from "@vendure/core";
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { Ctx, Transaction, RequestContext, AssetService, Asset } from "@vendure/core";
 import {
   CreateAssetResult,
   MutationCreateAssetsArgs,
@@ -27,5 +27,23 @@ export class AssetShopResolver {
         ? { ...a, __typename: "Asset" }
         : { ...a, __typename: "MimeTypeError" }
     );
+  }
+
+  @Query()
+  @Transaction()
+  async getAssetsById(
+    @Ctx() ctx: RequestContext,
+    @Args() args: { ids: string[] }
+  ) {
+    let result: Asset[] = [];
+    for (let i = 0; i < args.ids.length; i++) {
+      const one = await this.assetService.findOne(ctx, args.ids[i]);
+
+      if (one) {
+        result.push(one);
+      }
+    }
+
+    return result;
   }
 }

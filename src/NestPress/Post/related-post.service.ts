@@ -17,8 +17,8 @@ export class RelatedPostService {
       relations: ['leftPost', 'rightPost'],
       fullTextSearch: {},
       customFilterPropertyMap: {
-        leftPost: "leftPost.id",
-        rightPost: "rightPost.id",
+        leftRelatedPost: "leftRelatedPost.id",
+        rightRelatedPost: "rightRelatedPost.id",
       },
     });
   }

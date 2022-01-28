@@ -254,8 +254,8 @@ export const extendPost = gql`
 
   input RelatedPostFilter {
     id: IDOperators
-    leftRelatedPost: IDOperators
-    rightRelatedPost: IDOperators
+    leftPost: IDOperators
+    rightPost: IDOperators
     relationType: StringOperators
     customFields: JSONOperators
   }

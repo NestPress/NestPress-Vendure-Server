@@ -40,7 +40,7 @@ export const extendPost = gql`
     updatedAt: DateTime
     publishAt: DateTime
     expireAt: DateTime
-    createdBy: Customer!
+    author: User!
     postType: PostType!
     customType: String
     customFields: JSON
@@ -55,6 +55,7 @@ export const extendPost = gql`
     blocks: [Block]
     # contentBlocks
     postTaxonomies: [PostTaxonomyValue]
+    editors: [User]
   }
 
   type Post implements Node {
@@ -63,7 +64,7 @@ export const extendPost = gql`
     updatedAt: DateTime
     publishAt: DateTime
     expireAt: DateTime
-    createdBy: Customer!
+    author: User!
     postType: PostType!
     customType: String
     customFields: JSON
@@ -77,6 +78,7 @@ export const extendPost = gql`
     relatedUsers: [RelatedUser]
     # contentBlocks
     postTaxonomies: [PostTaxonomyValue]
+    editors: [User]
   }
 
   input RelatedPostInput {
@@ -120,6 +122,7 @@ export const extendPost = gql`
     rightRelatedPost: [RelatedPostInput]
     relatedUsers: [RelatedUserInput]
     postTaxonomies: [ID]
+    editors: [ID]
   }
 
   input UpdatePostInput {
@@ -136,6 +139,7 @@ export const extendPost = gql`
     rightRelatedPost: [RelatedPostInput]
     relatedUsers: [RelatedUserInput]
     postTaxonomies: [ID]
+    editors: [ID]
   }
 
   input PostTypeOperators {

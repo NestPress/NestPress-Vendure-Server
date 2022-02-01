@@ -15,7 +15,8 @@ export type PostInput = {
   title: string
   content: string
   slug: string
-  postTaxonomies: []
+  postTaxonomies: [],
+  editors: string[]
 }
 
 export type PostsFilter = {

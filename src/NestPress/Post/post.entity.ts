@@ -117,8 +117,17 @@ export class Post extends VendureEntity {
   postTaxonomies!: PostTaxonomyValue[];
 
   @ManyToOne(
-    () => User
+    () => User,
+    {
+      nullable: true,
+    }
   )
   @JoinColumn()
   author!: User;
+
+  @ManyToMany(
+    () => User
+  )
+  @JoinTable()
+  editors!: User[];
 }

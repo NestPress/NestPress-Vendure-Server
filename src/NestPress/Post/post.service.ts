@@ -8,6 +8,7 @@ import {
   RequestContext,
   TransactionalConnection,
   UnauthorizedError,
+  User,
   UserService,
 } from "@vendure/core";
 import { GetPostsArgs, PostInput, PostsFilter } from "./post.resolver";
@@ -30,7 +31,7 @@ export class PostService {
     this.queryCollection = createAdvancedQuery({
       connection,
       entity: Post,
-      relations: ["leftRelatedPosts", "rightRelatedPosts", "postTaxonomies"],
+      relations: ["leftRelatedPosts", "rightRelatedPosts", "postTaxonomies", "author", "editors"],
       fullTextSearch: {},
       customFilterPropertyMap: {
         leftRelatedPostId: "leftRelatedPosts.id",
@@ -169,9 +170,12 @@ export class PostService {
 
     await this.postPermissionService.validatePostOrFail(post, user, "update");
 
-    const updatingPost = Object.assign(post, input);
+    const updatingPost = Object.assign(post, {
+      ...input
+    });
 
     await this.mapTaxonomiesInputsToEntities(input, updatingPost);
+    await this.mapEditorInputsToEntities(input, post);
 
     return await repository.save(updatingPost);
   }
@@ -186,7 +190,8 @@ export class PostService {
 
     const post = repository.create({
       ...input,
-      author: user,
+      editors: input.editors as any,
+      author: user.id as any,
       // asset,
     });
 
@@ -197,6 +202,7 @@ export class PostService {
     }
 
     await this.mapTaxonomiesInputsToEntities(input, post);
+    await this.mapEditorInputsToEntities(input, post);
 
     return await repository.save(post);
   }
@@ -244,6 +250,22 @@ export class PostService {
       }
 
       post.postTaxonomies = input.postTaxonomies.map((id) => {
+        return {
+          id,
+        };
+      }) as any;
+    }
+  }
+
+  private async mapEditorInputsToEntities(input: PostInput, post: Post) {
+    if (input.editors) {
+      const userRepo =
+        this.connection.getRepository(User);
+      for (let i = 0; i < input.editors.length; i++) {
+        await userRepo.findOneOrFail(input.editors[i]);
+      }
+
+      post.editors = input.editors.map((id) => {
         return {
           id,
         };

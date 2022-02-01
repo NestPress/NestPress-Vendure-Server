@@ -3,7 +3,7 @@ import { Column, DeepPartial, Entity, Index, JoinColumn, ManyToOne, PrimaryGener
 
 export type PostOperation = "create" | "update" | "delete" | "read" | "list";
 
-export type PostPermissionScope = "author" | "all" | "contributor";
+export type PostPermissionScope = "author" | "all" | "editor";
 
 @Entity()
 @Index(['customType', 'role', 'operation', 'scope'])

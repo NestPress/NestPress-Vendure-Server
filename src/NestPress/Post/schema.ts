@@ -82,16 +82,16 @@ export const extendPost = gql`
   }
 
   input RelatedPostInput {
-    leftPost: ID!
-    rightPost: ID!
+    leftPost: ID
+    rightPost: ID
     relationType: String!
     customFields: JSON
   }
 
   type RelatedPost {
     id: ID!
-    leftPost: Post!
-    rightPost: Post!
+    leftPost: Post
+    rightPost: Post
     relationType: String!
     customFields: JSON
   }
@@ -213,6 +213,8 @@ export const extendPost = gql`
     id: IDOperators
     leftRelatedPostId: IDOperators
     rightRelatedPostId: IDOperators
+    leftRelatedPost: JSONOperators,
+    rightRelatedPost: JSONOperators,
     postTaxonomiesId: IDOperators
     postTaxonomiesKey: StringOperators
     postTaxonomiesValue: StringOperators
@@ -239,17 +241,17 @@ export const extendPost = gql`
   }
 
   input CreateRelatedPostInput {
-    leftPost: ID!
-    rightPost: ID!
-    relationType: String!
+    leftPost: ID
+    rightPost: ID
+    relationType: String
     customFields: JSON
   }
 
   input UpdateRelatedPostInput {
     id: ID!
-    leftPost: ID!
-    rightPost: ID!
-    relationType: String!
+    leftPost: ID
+    rightPost: ID
+    relationType: String
     customFields: JSON
   }
 

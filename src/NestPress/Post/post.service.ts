@@ -31,7 +31,15 @@ export class PostService {
     this.queryCollection = createAdvancedQuery({
       connection,
       entity: Post,
-      relations: ["leftRelatedPosts", "rightRelatedPosts", "postTaxonomies", "author", "editors"],
+      relations: [
+        "leftRelatedPosts",
+        "rightRelatedPosts",
+        "rightRelatedPosts.leftPost" as any,
+        "rightRelatedPosts.rightPost" as any,
+        "postTaxonomies",
+        "author",
+        "editors",
+      ],
       fullTextSearch: {},
       customFilterPropertyMap: {
         leftRelatedPostId: "leftRelatedPosts.id",
@@ -83,12 +91,11 @@ export class PostService {
     if (!args.filter) {
       args.filter = {
         customType: {
-          notIn: userCustomTypes
-        }
-      } as any
-    }
-    else if (args.filter && !args.filter.customType) {
-      if (userCustomTypes.length >0) {
+          notIn: userCustomTypes,
+        },
+      } as any;
+    } else if (args.filter && !args.filter.customType) {
+      if (userCustomTypes.length > 0) {
         args.filter.customType = {
           notIn: userCustomTypes,
         };
@@ -171,7 +178,7 @@ export class PostService {
     await this.postPermissionService.validatePostOrFail(post, user, "update");
 
     const updatingPost = Object.assign(post, {
-      ...input
+      ...input,
     });
 
     await this.mapTaxonomiesInputsToEntities(input, updatingPost);
@@ -259,8 +266,7 @@ export class PostService {
 
   private async mapEditorInputsToEntities(input: PostInput, post: Post) {
     if (input.editors) {
-      const userRepo =
-        this.connection.getRepository(User);
+      const userRepo = this.connection.getRepository(User);
       for (let i = 0; i < input.editors.length; i++) {
         await userRepo.findOneOrFail(input.editors[i]);
       }

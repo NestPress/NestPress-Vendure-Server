@@ -24,6 +24,8 @@ export type PostsFilter = {
   category?: ListFiltersOperators<PostTaxonomyValue>
   tags?: ListFiltersOperators<PostTaxonomyValue>
   customType?: ListFiltersOperators<string | null>
+  leftRelatedPostId?: ListFiltersOperators<ID | null>
+  rightRelatedPostId?: ListFiltersOperators<ID | null>
 }
 
 export type GetPostsArgs = GetListArgs<PostsFilter>;

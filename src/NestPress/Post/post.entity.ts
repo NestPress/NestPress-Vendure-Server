@@ -90,7 +90,8 @@ export class Post extends VendureEntity {
 
   @Column({
     type: "varchar",
-    default: ""
+    default: "",
+    nullable: true
   })
   customType?: string;
 

@@ -207,6 +207,8 @@ export const extendPost = gql`
   input PostsFilter {
     postType: PostTypeOperators
     id: IDOperators
+    leftRelatedPostId: IDOperators
+    rightRelatedPostId: IDOperators
     postTaxonomiesId: IDOperators
     postTaxonomiesKey: StringOperators
     postTaxonomiesValue: StringOperators

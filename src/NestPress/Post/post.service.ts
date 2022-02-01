@@ -33,6 +33,8 @@ export class PostService {
       relations: ["leftRelatedPosts", "rightRelatedPosts", "postTaxonomies"],
       fullTextSearch: {},
       customFilterPropertyMap: {
+        leftRelatedPostId: "leftRelatedPosts.id",
+        rightRelatedPostId: "rightRelatedPosts.id",
         postTaxonomiesId: "postTaxonomies.id",
         postTaxonomiesKey: "postTaxonomies.key",
         postTaxonomiesValue: "postTaxonomies.value",

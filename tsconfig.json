@@ -9,8 +9,7 @@
     "strict": true,
     "sourceMap": false,
     "outDir": "./dist",
-    "baseUrl": "./",
-    "skipLibCheck": true
+    "baseUrl": "./"
   },
   "exclude": ["node_modules", "migration.ts"]
 }

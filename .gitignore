@@ -5,5 +5,3 @@ static/email/test-emails
 .env
 tailwind.ts
 src/NestPress/admin-ui
-.history
-.vcode

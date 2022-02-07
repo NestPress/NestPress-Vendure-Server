@@ -16,5 +16,3 @@ import { GreeterComponent } from './post-permissions.component';
   declarations: [GreeterComponent],
 })
 export class PostPermissionModule {}
-
-export class GreeterModule {}

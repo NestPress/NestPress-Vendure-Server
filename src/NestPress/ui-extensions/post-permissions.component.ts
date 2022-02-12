@@ -106,7 +106,7 @@ export class PostPermissionsComponent {
             shouldAllow
             customType
             operation
-            scope
+            scope 
           }
         }
       `,

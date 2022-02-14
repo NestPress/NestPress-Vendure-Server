@@ -1,51 +1,3 @@
-<<<<<<< HEAD
-{
-  "name": "my-v",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "run:server": "node ./dist/src/index.js",
-    "run:worker": "node ./dist/src/index-worker.js",
-    "dev:server": "./node_modules/.bin/ts-node-dev --respawn ./src/index.ts",
-    "dev:worker": "./node_modules/.bin/ts-node-dev ./src/index-worker.ts",
-    "start": "./node_modules/.bin/concurrently yarn:run:*",
-    "build": "tsc && yarn run copy-static",
-    "dev": "concurrently yarn:dev:*",
-    "migration:generate": "ts-node migration generate",
-    "migration:run": "./node_modules/.bin/ts-node migration run",
-    "migration:revert": "./node_modules/.bin/ts-node migration revert",
-    "schema:generate": "./node_modules/.bin/ts-node generate-schema",
-    "copy-static": "node ./scripts/copy-static",
-    "generate-tailwind": "ts-node ./scripts/generate-tailwind.ts"
-  },
-  "dependencies": {
-    "@nestjs/common": "^7.6.17",
-    "@nestjs/core": "7.6.17",
-    "@nestjs/graphql": "^8.0.0",
-    "@nestjs/platform-express": "^8.2.5",
-    "@vendure/admin-ui": "^1.4.5",
-    "@vendure/admin-ui-plugin": "1.3.1",
-    "@vendure/asset-server-plugin": "1.3.1",
-    "@vendure/core": "1.3.1",
-    "@vendure/email-plugin": "^1.4.4",
-    "@vendure/ui-devkit": "^1.4.5",
-    "@apollo/gateway": "^0.29.1",
-    "angular": "^1.8.2",
-    "apollo-server-express": "^2.0.0",
-    "concurrently": "^7.0.0",
-    "pg": "8.7.1",
-    "ts-node": "^10.4.0",
-    "typeorm": "^0.2.38",
-    "typescript": "4.2.3"
-  },
-  "devDependencies": {
-    "@types/jest": "^27.4.0",
-    "@types/uuid": "^8.3.4",
-    "jest": "^27.4.7",
-    "ts-node-dev": "^1.1.6"
-  }
-}
-=======
 {
   "name": "my-v",
   "version": "0.1.0",
@@ -94,4 +46,3 @@
     "ts-node-dev": "^1.1.6"
   }
 }
->>>>>>> 214a9c8f2fc0e8ed2b3003873f0638b8082ad946
